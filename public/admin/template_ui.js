@@ -35,9 +35,9 @@ function Template_ui() {
 		getPublishedComponent(menu, function(){
 			var ui_test = jq('#test2');
 			ui_test.append("Voilà le Menu (lang=en, type=menu, published=true) de la BDD :<br/>");
-			ui_test.append("Item 0 : " + menu.children[0]);
-			ui_test.append("Item 1 : " + menu.children[1]);
-			ui_test.append("Sous-item 0 de l'Item 1 : " + menu.children[1].children[0]);
+			ui_test.append("Item 0 : " + menu.children[0].txt+"<br/>");
+			ui_test.append("Item 1 : " + menu.children[1].txt+"<br/>");
+			ui_test.append("Sous-item 0 de l'Item 1 : " + menu.children[1].children[0].txt+"<br/>");
 		});
 	}
 
