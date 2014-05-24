@@ -1,0 +1,70 @@
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<title>Tests templates</title>
+	<link rel="stylesheet" type="text/css" href="./bootstrap/css/bootstrap.min.css" />
+	<link rel="stylesheet" type="text/css" href="./bootstrap/css/bootstrap-theme.min.css" />
+	<link rel="stylesheet" type="text/css" href="arborescence_css.css" />
+	<link rel="stylesheet" type="text/css" href="style.css" />
+</head>
+<body>
+<div class="container">
+
+	<div class="panel panel-default">
+
+
+
+		<div class="panel-heading">
+			<form class="navbar-form navbar-left" role="search">
+	  			<div class="form-group">
+	  				<input id="txt_type" type="text" class="form-control"/>
+					<button id="add_type" type="button" class="btn btn-default ">Ajouter Type</button>
+					
+				</div>
+			</form>
+			<br/>
+			<form class="navbar-form navbar-left" role="search">
+				<select id="lst_type" class="form-control"></select>
+			</form>
+			<button id="save" type="button" class="btn btn-default navbar-btn btn_insertion_bd">Enregistrer</button>
+			<button id="publish" type="button" class="btn btn-default navbar-btn btn_insertion_bd">Publier</button>
+			<button id="delete" type="button" class="btn btn-default navbar-btn btn_insertion_bd">Supprimer</button>
+		</div>
+
+
+		<div class="panel-body">
+			<div id="panel_structure" class="panel panel-default">
+			  <div class="panel-body">
+			  	<textarea id="template" style="width: 600px; height: 200px;"></textarea>
+			  </div>
+			</div>
+			<div id="test"></div>
+		</div>
+
+	</div>
+
+</div>
+
+
+
+
+</body>
+<footer>
+	<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="jquery.js"></script>
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <script src="./bootstrap/js/bootstrap.min.js"></script>
+    <script src="./util.js"></script>
+    <script src="./template.js"></script>
+    <script src="./template_ui.js"></script>
+    <script type="text/javascript">
+		//Éviter les conflits entre browsers
+		var jq = jQuery.noConflict();
+
+		var t_ui = new Template_ui();
+		t_ui.load();
+	</script>
+</footer>
+</html>
