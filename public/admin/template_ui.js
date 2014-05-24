@@ -22,9 +22,22 @@ function Template_ui() {
 		var l_menu = [];
 		getAllComponents(l_menu, "en", "menu", "Menu", function(){
 			var ui_test = jq('#test');
+			ui_test.append("Voilà tous les menus :<br/>");
 			for (var i = 0; i < l_menu.length; i++) {
 				ui_test.append(""+ l_menu[i].type +" avec "+l_menu[i].children.length+" children. Key : "+l_menu[i].key+"<br/>");
 			}
+		});
+
+		// Exemple de récupération de menu pour Bruno
+		var menu = new Menu();
+		menu.lang = 'en';
+		menu.type = 'menu';
+		getPublishedComponent(menu, function(){
+			var ui_test = jq('#test2');
+			ui_test.append("Voilà le Menu (lang=en, type=menu, published=true) de la BDD :<br/>");
+			ui_test.append("Item 0 : " + menu.children[0]);
+			ui_test.append("Item 1 : " + menu.children[1]);
+			ui_test.append("Sous-item 0 de l'Item 1 : " + menu.children[1].children[0]);
 		});
 	}
 
