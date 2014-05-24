@@ -1,5 +1,6 @@
 // template.js
 
+// component on which every util.js procedures can perform
 function Template(){
 
 	var that = this;
@@ -34,51 +35,4 @@ function Template(){
 		that.lang = json.lang;
 		that.html = json.html;
 	}
-	
-	that.save = function(callback) {
-		jq.ajax({
-			url : 'http://localhost:8080/component/' + that.key,
-			type : 'POST',
-			dataType : 'text',
-			data : JSON.stringify(that.to_json()),
-			contentType : "application/json; charset=utf-8",
-			traditional : true,
-			success : function(msg) {
-				console.log("Enregistrement template réussi");
-				callback();
-			},
-			error : function(msg) {
-				console.log("Erreur lors de l'enregistrement template");
-			}
-		});
-	}
-
-	
-	that.publish = function(callback) {
-		that.published = true;
-		that.save(callback);
-	}
-
-	that.getPublished = function(type, callback){
-		jq.ajax({
-			url : 'http://localhost:8080/component/template/' + type,
-			type : 'GET',
-			dataType : 'text',
-			data : '',
-			contentType : "application/json; charset=utf-8",
-			traditional : true,
-			success : function(msg) {
-				console.log("Récupération template publié réussi");
-				that.from_json(JSON.parse(msg));
-				callback();
-			},
-			error : function(msg) {
-				console.log("Erreur lors de la récupération template publié");
-			}
-		});
-	}
-
-
-
-
 }
