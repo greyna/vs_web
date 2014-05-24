@@ -103,7 +103,7 @@ function getPublishedComponent(component, callback) {
 }
 
 // string classe_js_component doit avoir exactement le nom de votre classe js (par exemple "Menu" ou "Template")
-getUnpublishedComponents = function(liste, lang, type, classe_js_component, callback) {
+getAllComponents = function(liste, lang, type, classe_js_component, callback) {
 	jq.ajax({
 		url : 'http://localhost:8080/listComponents/' + lang + '/' + type,
 		type : 'GET',
@@ -114,17 +114,42 @@ getUnpublishedComponents = function(liste, lang, type, classe_js_component, call
 		success : function(msg) {
 
 			l = JSON.parse(msg);
-			console.log(""+l.length);
 			for (var i = 0; i < l.length; i++) {
 				compo = new tis[classe_js_component];
 				compo.from_json(l[i]);
 			    liste.push(compo);
 			}
-			console.log("getUnpublishedComponents réussi");
+			console.log("getAllComponents réussi");
 			callback();
 		},
 		error : function(msg) {
-			console.log("getUnpublishedComponents raté");
+			console.log("getAllComponents raté");
+		}
+	});
+}
+
+// string classe_js_component doit avoir exactement le nom de votre classe js (par exemple "Menu" ou "Template")
+getTemplates = function(liste, callback) {
+	jq.ajax({
+		url : 'http://localhost:8080/listTemplates',
+		type : 'GET',
+		dataType : 'text',
+		data : '',
+		contentType : "application/json; charset=utf-8",
+		traditional : true,
+		success : function(msg) {
+
+			l = JSON.parse(msg);
+			for (var i = 0; i < l.length; i++) {
+				compo = new tis['Template'];
+				compo.from_json(l[i]);
+			    liste.push(compo);
+			}
+			console.log("getTemplates réussi");
+			callback();
+		},
+		error : function(msg) {
+			console.log("getTemplates raté");
 		}
 	});
 }

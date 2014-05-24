@@ -212,7 +212,7 @@ Item.prototype.create_from_json = function(json) {
 		return null;
 
 	if(json.constructor == String)
-		json = JSON.parse(json);
+		var i;//json = JSON.parse(json);
 	else{
 		if(json.constructor != Object)
 			return null;

@@ -226,7 +226,7 @@ function GestionnaireMenu(){
 	that.recup_menu = function(menu){
 	 	//Menu.prototype.from_json retourne true en cas de succès
 	 	//et false si la récupération a échoué
-		menu.from_json(
+		menu.from_json(JSON.parse(
 			jq.ajax({
 				url : 'http://localhost:8080/component/en/menu', //récupère le menu publié
 				type : 'GET',
@@ -240,7 +240,7 @@ function GestionnaireMenu(){
 				error : function(msg) {
 				},
 				async : false
-			}).responseText);
+			}).responseText));
 
 	}
 

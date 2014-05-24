@@ -7,16 +7,25 @@ function Template_ui() {
 	
 	that.currentTemplate = new Template();
 	that.load = function() {
-		that.currentTemplate.type = "menu";
-		l_template = [];
 
-		getUnpublishedComponents(l_template, that.currentTemplate.lang, that.currentTemplate.type, "Template", function(){
+		var l_template = [];
+		getTemplates(l_template, function(){
 			for (var i = 0; i < l_template.length; i++) {
 				that.add_type(l_template[i].type);
 			}
+
+			that.currentTemplate.type = "menu";
 			getPublishedComponent(that.currentTemplate, that.renderTemplate);
 		});
 
+		// Test de getAllComponents pour le menu de Thomas
+		var l_menu = [];
+		getAllComponents(l_menu, "en", "menu", "Menu", function(){
+			var ui_test = jq('#test');
+			for (var i = 0; i < l_menu.length; i++) {
+				ui_test.append(""+ l_menu[i].type +" avec "+l_menu[i].children.length+" children. Key : "+l_menu[i].key+"<br/>");
+			}
+		});
 	}
 
 	that.ui_template = jq('#template');
@@ -54,6 +63,10 @@ function Template_ui() {
 
 	that.ui_save.click(function(e) {
 		saveComponent(that.currentTemplate, function(){});
+	});
+
+	that.ui_delete.click(function(e) {
+		deleteComponent(that.currentTemplate, function(){});
 	});
 
 	that.ui_publish.click(function (e){

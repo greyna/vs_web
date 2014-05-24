@@ -7,7 +7,11 @@ function Menu(){
 
 	var that = this;
 
-	that.key = jq.now() + Math.random().toString(36).substr(2); //jq.now() + Math.random().toString(36).substr(2)
+	that.key = "rien"; // string
+	that.newkey = function() { that.key = jq.now() + Math.random().toString(36).substr(2); }
+	that.newkey();
+	//that.key = jq.now() + Math.random().toString(36).substr(2); //jq.now() + Math.random().toString(36).substr(2)
+
 	that.url; //string
 	that.release; //string
 	that.published = false; //bool
@@ -246,7 +250,7 @@ Menu.prototype.create_from_json = function(json) {
 		return null;
 
 	if(json.constructor == String)
-		json = JSON.parse(json);
+		var i;//json = JSON.parse(json);
 	else{
 		if(json.constructor != Object)
 			return null;

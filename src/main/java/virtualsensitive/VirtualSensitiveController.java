@@ -51,40 +51,40 @@ public class VirtualSensitiveController extends WebMvcConfigurerAdapter {
 
 	// spring security
 	@Override	
-    public void addViewControllers(ViewControllerRegistry registry) {
-        registry.addViewController("/home").setViewName("home");
-        registry.addViewController("/hello").setViewName("hello");
-        registry.addViewController("/admin/login").setViewName("login");
-    }
+	public void addViewControllers(ViewControllerRegistry registry) {
+		registry.addViewController("/home").setViewName("home");
+		registry.addViewController("/hello").setViewName("hello");
+		registry.addViewController("/admin/login").setViewName("login");
+	}
 	@Bean
 	public ApplicationSecurity applicationSecurity() {
 		return new ApplicationSecurity();
 	}
 	protected static class ApplicationSecurity extends WebSecurityConfigurerAdapter {
-		
+
 		@Override
 		protected void configure(HttpSecurity http) throws Exception {
 			http.csrf().disable();
-	        http
-            .authorizeRequests()
-                .antMatchers("/admin/**", "/page/**", "/component/**", "/listComponents/**", "/upload/**").authenticated()
-                .anyRequest().permitAll();
-	        http
-            .formLogin()
-                .loginPage("/admin/login")
-                .permitAll()
-                .defaultSuccessUrl("/admin/index.html", true)
-                .and()
-            .logout()
-                .permitAll();
+			http
+			.authorizeRequests()
+			.antMatchers("/admin/**", "/page/**", "/component/**", "/listComponents/**", "/upload/**").authenticated()
+			.anyRequest().permitAll();
+			http
+			.formLogin()
+			.loginPage("/admin/login")
+			.permitAll()
+			.defaultSuccessUrl("/admin/index.html", true)
+			.and()
+			.logout()
+			.permitAll();
 		}
-		
+
 		@Override
-	    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-	        auth
-	            .inMemoryAuthentication()
-	                .withUser("user").password("password").roles("USER");
-	    }
+		protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+			auth
+			.inMemoryAuthentication()
+			.withUser("user").password("password").roles("USER");
+		}
 	}
 
 
@@ -137,7 +137,6 @@ public class VirtualSensitiveController extends WebMvcConfigurerAdapter {
 	public ResponseEntity<String>  publishPage(@PathVariable("name") String name, @RequestBody String body) throws Exception {
 		Writer writer = null;
 		try {
-			System.out.println(name);
 			writer = new BufferedWriter(new OutputStreamWriter(
 					new FileOutputStream("public/" + name), "utf-8"));
 			writer.write(body);
@@ -165,7 +164,7 @@ public class VirtualSensitiveController extends WebMvcConfigurerAdapter {
 		}
 	}
 
-	
+
 	// rest json component
 	@RequestMapping(value="/component/{key}", method=RequestMethod.GET)
 	@ResponseBody
@@ -199,17 +198,16 @@ public class VirtualSensitiveController extends WebMvcConfigurerAdapter {
 		query.setKey(ComplexKey.of(lang, type, true));
 		query.setIncludeDocs(true);
 
-		System.out.println("\nlet's go !");
+		System.out.println("\ngetPublishedComponent begins.");
 		ViewResponse response = null;
 		response = client.query(view, query);
 
 		String result = null;
 		for(ViewRow row : response) {
 			result = row.getDocument().toString();
-//			System.out.println("\n"+result);
 		}
 
-		System.out.println("\npostquery !");
+		System.out.println("getPublishedComponent ends.");
 
 		if (result!=null)
 			return new ResponseEntity<String>(result, HttpStatus.OK);
@@ -217,17 +215,17 @@ public class VirtualSensitiveController extends WebMvcConfigurerAdapter {
 			return new ResponseEntity<String>("", HttpStatus.NOT_FOUND);
 	}
 
-	// Give back the list of all unpublished components identified by type and language
+	// Give back the list of all components identified by type and language
 	@RequestMapping(value="/listComponents/{lang}/{type}", method=RequestMethod.GET)
 	@ResponseBody
-	public ResponseEntity<String>  getUnpublishedComponents(@PathVariable("lang") String lang, @PathVariable("type") String type) throws Exception {
-		View view = client.getView("component", "v_component");
+	public ResponseEntity<String>  getAllComponents(@PathVariable("lang") String lang, @PathVariable("type") String type) throws Exception {
+		View view = client.getView("component", "v_all_components");
 
 		Query query = new Query();
-		query.setKey(ComplexKey.of(lang, type, false));
+		query.setKey(ComplexKey.of(lang, type));
 		query.setIncludeDocs(true);
 
-		System.out.println("\nlet's go !");
+		System.out.println("\ngetAllComponents begins");
 		ViewResponse response = null;
 		response = client.query(view, query);
 
@@ -239,8 +237,7 @@ public class VirtualSensitiveController extends WebMvcConfigurerAdapter {
 			hasResponses = true;
 		}
 
-		System.out.println("\n"+result);
-
+		System.out.println("getAllComponents ends");
 		if (hasResponses) {
 			result.delete(result.length()-2, result.length());
 			result.append(" ]");
@@ -251,4 +248,36 @@ public class VirtualSensitiveController extends WebMvcConfigurerAdapter {
 		}
 	}
 
+	// Give back the list of all templates identified by type and language
+	@RequestMapping(value="/listTemplates", method=RequestMethod.GET)
+	@ResponseBody
+	public ResponseEntity<String>  getTemplates() throws Exception {
+		View view = client.getView("component", "v_templates");
+
+		Query query = new Query();
+		query.setKey("template");
+		query.setIncludeDocs(true);
+
+		System.out.println("\ngetTemplates begins");
+		ViewResponse response = null;
+		response = client.query(view, query);
+
+		boolean hasResponses = false;
+		StringBuilder result = new StringBuilder("[ ");
+		for(ViewRow row : response) {
+			result.append(row.getDocument().toString());
+			result.append(", ");
+			hasResponses = true;
+		}
+
+		System.out.println("getTemplates ends");
+		if (hasResponses) {
+			result.delete(result.length()-2, result.length());
+			result.append(" ]");
+			return new ResponseEntity<String>(result.toString(), HttpStatus.OK);
+		}
+		else {
+			return new ResponseEntity<String>("", HttpStatus.NOT_FOUND);
+		}
+	}
 }
