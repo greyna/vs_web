@@ -1,15 +1,17 @@
 <html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
 <body>
-	<form method="POST" enctype="multipart/form-data" action="/upload">
-		<table id="fileTable"><tbody>
-			<tr>
-				<td>[0] Name : <input type="text" id="name0" name="name"/><br /></td>
-				<td>File to upload : <input type="file" id="file0" name="file" /></td>
-			</tr>
-		</tbody></table><br />
+	<form id="upload" method="POST" enctype="multipart/form-data" action="/upload">
+		<table id="fileTable"><tbody></tbody></table>
+		<br />
 		<input id="addFile" type="button" value="Add File" /> Press here to add an upload field.<br/>
 		<input type="submit" id="submit" value="Upload"/> Press here to upload the files!
 	</form>
+	<br/>
+	<div id="result"><div/>
 </body>
 <footer>
     <script src="jquery.js"></script>
@@ -17,30 +19,60 @@
     <script type="text/javascript">
 		//Éviter les conflits entre browsers
 		var jq = jQuery.noConflict();
-		jq('#addFile').click(function() {
+
+		function addUploadField() {
 			var newFileIndex = jq('#fileTable tbody').children().length;
 	        jq('#fileTable tbody').append(
 				'<tr>'+
 					'<td>['+newFileIndex+'] Name : <input type="text" id="name'+newFileIndex+'" name="name"/><br /></td>'+
 					'<td>File to upload : <input type="file" id="file'+newFileIndex+'" name="file" /></td>'+
 				'</tr>');
-		});
-		// var data = new FormData();
-		// jQuery.each($('#file')[0].files, function(i, file) {
-		//     data.append('file-'+i, file);
-		// });
 
-		// jq.ajax({
-		//     url: 'php/upload.php',
-		//     data: data,
-		//     cache: false,
-		//     contentType: false,
-		//     processData: false,
-		//     type: 'POST',
-		//     success: function(data){
-		//         alert(data);
-		//     }
-		// });
+	        jq('#file'+newFileIndex).change(function(e) {
+	        	var filename = jq('#file'+newFileIndex).val().replace(/.*(\/|\\)/, '');
+	        	jq('#name'+newFileIndex).val(filename);
+	        });
+		}
+
+		function uploadFiles() {
+			var nbFiles = jq('#fileTable tbody').children().length;
+			var data = new FormData();
+
+			for (var i = 0; i < nbFiles; i++) {
+				var file = jq('#file'+i)[0].files[0];
+				var name = jq('#name'+i).val();
+
+				if (name != "" && file != undefined) {
+					data.append('file', file);
+					data.append('name', name);
+				}
+			}
+
+			jq.ajax({
+			    url: 'http://localhost:8080/upload',
+			    data: data,
+			    cache: false,
+			    contentType: false,
+			    processData: false,
+			    type: 'POST',
+			    success: function(msg){
+					console.log("upload réussi");
+					jq('#result').html(msg);
+			    },
+				error : function(msg) {
+					console.log("upload raté");
+					jq('#result').html(msg);
+				}
+			});
+		}
+
+
+		addUploadField();
+		jq('#addFile').click(addUploadField);
+		jq('#upload').submit(function(e) {
+			e.preventDefault();
+			uploadFiles();
+		});
 	</script>
 </footer>
 </html>

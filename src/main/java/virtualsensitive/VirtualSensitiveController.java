@@ -74,7 +74,6 @@ public class VirtualSensitiveController extends WebMvcConfigurerAdapter {
 			.formLogin()
 			.loginPage("/admin/login")
 			.permitAll()
-			.defaultSuccessUrl("/admin/index.html", true)
 			.and()
 			.logout()
 			.permitAll();
@@ -107,18 +106,21 @@ public class VirtualSensitiveController extends WebMvcConfigurerAdapter {
 		for (int i = 0; i < files.size(); ++i) {
 			name = names.get(i);
 			file = files.get(i);
-			if (!file.isEmpty()) {
+			if (!file.isEmpty() || !name.isEmpty()) {
 				try {
 					byte[] bytes = file.getBytes();
 					BufferedOutputStream stream =
 							new BufferedOutputStream(new FileOutputStream(new File("public/" + name)));
 					stream.write(bytes);
 					stream.close();
+					System.out.println("You successfully uploaded " + name + " into " + "public/" + name);
 					message +=  "You successfully uploaded " + name + " into " + "public/" + name + "<br/>";
 				} catch (Exception e) {
+					System.out.println("You failed to upload " + name + " => " + e.getMessage());
 					message +=  "You failed to upload " + name + " => " + e.getMessage() + "<br/>";
 				}
 			} else {
+				System.out.println("You failed to upload " + name + " because the file was empty.");
 				message += "You failed to upload " + name + " because the file was empty.<br/>";
 			}
 		}
