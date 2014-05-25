@@ -1,20 +1,22 @@
 // template.js
 
 // component on which every util.js procedures can perform
-function Template(){
+function Page(){
 
 	var that = this;
 
-	that.key; // string
+	that.key = ""; // string
 	that.newkey = function() { that.key = jq.now() + Math.random().toString(36).substr(2); }
+
 	that.newkey();
 
-	that.className = "Template";
-	that.type = "rien"; 
+	that.type = "page"; 
 	that.release; //string
 	that.published = false; //bool
-	that.html; //string
-	
+	that.lang; //string
+	that.body; //string
+	that.template; //id du template
+
 	that.to_json = function(){
 		var json = new Object();
 		json.key = that.key;
@@ -34,4 +36,4 @@ function Template(){
 		that.lang = json.lang;
 		that.html = json.html;
 	}
-}
+}	

@@ -15,7 +15,8 @@ function Item(){
 	that.type = "item";
 	that.url;
 	that.visible = false;
-	
+	that.page; //id de la page liée
+
 	//SETTERS
 	that.set_key = function(key){
 		that.key = key;
@@ -37,6 +38,9 @@ function Item(){
 		that.visible = visible
 	}
 
+	that.set_page = function(page){
+		that.page = page;
+	}
 
 	//GETTERS
 	that.get_key = function(){
@@ -61,6 +65,10 @@ function Item(){
 
 	that.isVisible = function(){
 		return that.visible;
+	}
+
+	that.get_page = function(){
+		return that.page;
 	}
 
 	that.get_nb_children = function(){
@@ -156,6 +164,9 @@ function Item(){
 		it.parent = that.parent;
 		it.set_ordre(that.ordre);
 		it.set_key(that.key);
+		it.visible = that.visible;
+		it.page = that.page;
+		it.url = that.url;
 
 		for(i=0; i<that.children.length; ++i){
 			it.children.push(that.children[i]);
@@ -235,7 +246,8 @@ Item.prototype.create_from_json = function(json) {
 	it.txt = json.txt;
 	it.url = json.url;
 	it.visible = json.visible;
-	
+	it.page = json.page;
+
 	if(json.parent == -1)
 		it.parent = null;
 

@@ -14,7 +14,7 @@ function GestionnaireMenu(){
 	//           ATTRIBUTS           //
 	///////////////////////////////////
 
-	that.key = jq.now() + Math.random().toString(36).substr(2); //jq.now() + Math.random().toString(36).substr(2)
+	that.key = jq.now() + Math.random().toString(36).substr(2);
 	that.menu = null; //Menu
 
 	that.mode = "structure"; //structure, configure
@@ -75,7 +75,7 @@ function GestionnaireMenu(){
 		var previous;
 
 		//Si le texte est vide on ne fait rien
-		if(jq.trim(txt) == ""){
+		if(jq.trim(txt) === ""){
 			that.input_add.val('');
 			that.input_add.focus();
 			return;
@@ -502,12 +502,12 @@ function GestionnaireMenu(){
 	that.submit_config.click(function(){
 		var txt = that.txt_title.val();
 		var url = that.txt_url.val()
-		if(jq.trim(txt) == ""){
+		if(jq.trim(txt) === ""){
 			that.txt_title.val('');
 			that.txt_title.focus();
 			return;
 		}
-		if(jq.trim(url) == ""){
+		if(jq.trim(url) === ""){
 			that.txt_url.val('');
 			that.txt_url.focus();
 			return;
