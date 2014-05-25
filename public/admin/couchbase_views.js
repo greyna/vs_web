@@ -7,7 +7,7 @@
 // View name v_all_components
 function (doc, meta) {
   if (meta.type == "json" && doc.lang && doc.type && (doc.published || doc.published == false)) {
-    emit([doc.lang, doc.type, doc.published], null);
+    emit([doc.lang, doc.type], null);
   }
 }
 
@@ -21,6 +21,6 @@ function (doc, meta) {
 // View name v_templates
 function (doc, meta) {
   if (meta.type == "json" && doc.lang && doc.type && (doc.published || doc.published == false)) {
-    emit([doc.lang, doc.type, doc.published], null);
+    emit(doc.lang, null);
   }
 }
