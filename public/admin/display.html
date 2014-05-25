@@ -50,22 +50,12 @@
 			var testbody = "<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris a ornare sapien, id semper odio. Morbi et feugiat erat. Fusce vitae tempor lorem. Nulla aliquet vulputate felis id accumsan. Mauris viverra convallis turpis, a ultrices risus tempor sed. Praesent in arcu sem. Cras pulvinar blandit dui id aliquam.</p>";
 
 			context['body'] = testbody;
-			context['editable'] = "contenteditable='true'";
 			var templatePage = Handlebars.compile(template.html);
 			var html = templatePage(context);
 			//on génère le document avec la page obtenue
         	document.open();
 			document.write(html);
         	document.close();
-        	//ajout de l'event ctrl+s pour la sauvegarde à venir
-			jq(document).keyup(function(e){
-				e.preventDefault();
-				if(e.ctrlKey && e.which === 83){  
-
-				        alert(document.getElementById('editable').innerHTML);
-				        return false;
-				}
-   			 });	
 		</script>
 	</head>
 	<body>

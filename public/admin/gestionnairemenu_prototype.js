@@ -133,12 +133,16 @@ function GestionnaireMenu(){
 		//Si le parent contient déjà des enfants, on rajoute juste  l'item
 		//sinon on crée une nouvelle liste
 		if(it_parent.get_nb_children() > 1){ //on test > 1 car on a déjà rajouté l'enfant tout à l'heure
-			jq("#" + parent + ">ul").append("<li class = 'item'  id='" + it.get_key() + "'><a href='http://www.virtualsensitive.com/en/"
-				+  it.get_url() + "' target='_blank'>" + it.get_txt() + "</a></li>");
+			jq("#" + parent + ">ul").append("<li class = 'item'  id='" + it.get_key() 
+				+ "'><a href='./editPage.html?idpage=" +  it.get_key() 
+				+ "&lang=" + that.menu.get_lang() 
+				+ "' target='_blank'>" + it.get_txt() + "</a></li>");
 		}
 		else{
-			jq("#" + parent).append("<ul><li class = ' item'  id='" + it.get_key() + "'><a href='http://www.virtualsensitive.com/en/" 
-				+  it.get_url() + "' target='_blank'>" + it.get_txt() + "</a></li></ul>");
+			jq("#" + parent).append("<ul><li class = ' item'  id='" + it.get_key() 
+				+ "'><a href='./editPage.html?idpage=" + it.get_key() 
+				+ "&lang=" + that.menu.get_lang()
+				+ "' target='_blank'>" + it.get_txt() + "</a></li></ul>");
 		}
 
 		//On se replace ensuite dans l'input
@@ -255,13 +259,17 @@ function GestionnaireMenu(){
 			parent = it.parent.get_key();
 			//Soit on crée une nouvelle liste soit on insère un nouvel élément
 			if(it.get_ordre() == 0){
-				jq("#" + parent).append("<ul><li class = ' item'  id='" + it.get_key() + "'><a href='http://www.virtualsensitive.com/en/" 
-    				+  it.get_url() + "' target='_blank'>" + it.get_txt() + "</a></li></ul>");
+				jq("#" + parent + ">ul").append("<li class = 'item'  id='" + it.get_key() 
+					+ "'><a href='./editPage.html?idpage=" +  it.get_key() 
+					+ "&lang=" + that.menu.get_lang() 
+					+ "' target='_blank'>" + it.get_txt() + "</a></li>");
 
 			}
 			else{
-				jq("#" + parent + ">ul").append("<li class = 'item'  id='" + it.get_key() + "'><a href='http://www.virtualsensitive.com/en/"
-    					+  it.get_url() + "' target='_blank'>" + it.get_txt() + "</a></li>");
+				jq("#" + parent + ">ul").append("<li class = 'item'  id='" + it.get_key() 
+					+ "'><a href='./editPage.html?idpage=" +  it.get_key() 
+					+ "&lang=" + that.menu.get_lang() 
+					+ "' target='_blank'>" + it.get_txt() + "</a></li>");
 			}
 			//Ajout dans la liste au bon endroit
 			jq("#" + parent + that.suff_lst).after("<option id='" + it.get_key() + that.suff_lst + "' value='" + it.get_key() + "'>" 
@@ -281,6 +289,9 @@ function GestionnaireMenu(){
 		//On crée le menu
 		that.menu = new Menu();
 		that.recup_menu(that.menu);
+
+		//Par défaut la langue est anglaise
+		//TODO : permettre de choisir la langue via une liste
 		that.container_structure.attr('id',that.menu.get_key());
 
 		that.lst_items.append("<option id='" + that.menu.get_key()
@@ -524,8 +535,9 @@ function GestionnaireMenu(){
 		}
 
 		jq("#" + id + that.suff_lst).text(item.get_txt());
-		jq("#" + id).html("<a href='http://www.virtualsensitive.com/en/"
-				+  item.get_url() + "' target='_blank'>" + item.get_txt() + "</a>");
+		jq("#" + id).html("<a href='./editPage.html?"
+				+ "idpage=" + item.get_key()
+				+ "&lang=" + that.menu.get_lang() + "' target='_blank'>" + item.get_txt() + "</a>");
 
 		//On recharge met à jour la liste des settings et on recharge
 		that.lst_items_settings.find(":selected").text(item.get_txt());
@@ -561,13 +573,13 @@ function GestionnaireMenu(){
 		//sinon on crée une nouvelle liste
 		if(root.get_nb_children() > 0){
 			jq("#" + root.get_key() + ">ul").append("<li class = 'item'  id='" + partition.get_key() 
-				+ "'><a href='http://www.virtualsensitive.com/en/"
-				+  partition.get_url() + "' target='_blank'>" + partition.get_txt() + "</a></li>");
+				+ "'><a href='./editPage.html?idpage=" + partition.get_key()
+				+ "&lang=" + that.menu.get_lang() + "' target='_blank'>" + partition.get_txt() + "</a></li>");
 		}
 		else{
 			jq("#" + root.get_key()).append("<ul><li class = ' item'  id='" + partition.get_key() 
-				+ "'><a href='http://www.virtualsensitive.com/en/" 
-				+  partition.get_url() + "' target='_blank'>" + partition.get_txt() + "</a></li></ul>");
+				+ "'><a href='./editPage.html?idpage=" + partition.get_key()
+				+ "&lang=" + that.menu.get_lang()  + "' target='_blank'>" + partition.get_txt() + "</a></li></ul>");
 		}
 
 		jq("#" + root.get_key() + that.suff_lst).after("<option id='" + partition.get_key()
