@@ -17,20 +17,33 @@
 
 
 		<div class="panel-heading">
+			<h1>Gestion des templates</h1>
 			<form class="navbar-form navbar-left" role="search">
 	  			<div class="form-group">
 	  				<input id="txt_type" type="text" class="form-control"/>
-					<button id="add_type" type="button" class="btn btn-default ">Ajouter Type</button>
-					
+					<button id="add_type" type="button" class="btn btn-default ">Ajouter Type de Template</button>
 				</div>
 			</form>
+
+			
+			<button id="new_version" type="button" class="btn btn-default navbar-btn btn_insertion_bd">Ajouter version</button>
+			<button id="delete" type="button" class="btn btn-default navbar-btn btn_insertion_bd">Supprimer version</button>
+
 			<br/>
 			<form class="navbar-form navbar-left" role="search">
-				<select id="lst_type" class="form-control"></select>
+				Type de Template : 
+				<select id="lst_type" class="form-control">
+					<option id="lst_type_choisir" value="lst_type_choisir">Choisir...</option>
+				</select>
+				Version : 
+				<select id="lst_release" class="form-control">
+					<option id="lst_release_choisir" value="lst_release_choisir">Choisir...</option>
+				</select>
 			</form>
+			<span id="pub"></span>
 			<button id="save" type="button" class="btn btn-default navbar-btn btn_insertion_bd">Enregistrer</button>
 			<button id="publish" type="button" class="btn btn-default navbar-btn btn_insertion_bd">Publier</button>
-			<button id="delete" type="button" class="btn btn-default navbar-btn btn_insertion_bd">Supprimer</button>
+			
 		</div>
 
 
@@ -73,7 +86,7 @@
 		var jq = jQuery.noConflict();
 
 		var t_ui = new Template_ui();
-		t_ui.load();
+		t_ui.load(function(){console.log("template_ui loaded !")});
 	</script>
 </footer>
 </html>

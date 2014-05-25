@@ -21,6 +21,6 @@ function (doc, meta) {
 // View name v_templates
 function (doc, meta) {
   if (meta.type == "json" && doc.lang && doc.type && (doc.published || doc.published == false)) {
-    emit([doc.lang], null);
+    emit(doc.lang, null);
   }
 }
