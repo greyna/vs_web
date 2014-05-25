@@ -49,6 +49,7 @@ function GestionnaireMenu(){
 	that.items_children = jq("#children > tbody"); //Tableau des enfants de la page ==> table
 	that.submit_config = jq("#submit_config"); //Valider la config ==> button
 	that.cancel_config = jq("#cancel_config"); //Reset la config ==> button
+	that.delete_page = jq("#delete_page"); //Supprimer la page ==> button
 	that.show_item = jq("#show_item"); //La page est visible dans le menu ==> checkbox
 	that.edit_parent = jq("#edit_parent"); //Configurer le parent ===> button
 	that.txt_url = jq("#txt_url"); //L'URL de la page ===> input
@@ -56,6 +57,8 @@ function GestionnaireMenu(){
 	that.span_url = jq("#span_url");
 	that.suff_lst_parents = "_lst_parents";
 	that.suff_table_children = "_table_children";
+	that.class_children = "children";
+
 
 	//////////////////////////////////
 	//           METHODES           //
@@ -115,10 +118,16 @@ function GestionnaireMenu(){
 		jq("#" + previous + that.suff_lst)
 			.after("<option id='" + it.get_key() + that.suff_lst + "' value='" + it.get_key() + "'>" 
 				+ it.get_txt() + "</option>");
-		jq("#" + previous + that.suff_lst_settings)
+
+		if(that.menu.get_nb_children() <= 1){
+			that.lst_items_settings.append("<option id='" + it.get_key() + that.suff_lst_settings + "' value='" + it.get_key() + "'>" 
+				+ it.get_txt() + "</option>");
+		}
+		else{
+			jq("#" + previous + that.suff_lst_settings)
 			.after("<option id='" + it.get_key() + that.suff_lst_settings + "' value='" + it.get_key() + "'>" 
 				+ it.get_txt() + "</option>");
-
+		}
 		that.lst_items_settings.trigger("change");
 
 		//Si le parent contient déjà des enfants, on rajoute juste  l'item
@@ -137,20 +146,6 @@ function GestionnaireMenu(){
 
 	}
 
-	//Suppression d'un item
-	that.delete_item = function(){
-		
-	}
-
-	//Organisation d'un item
-	that.organize_item = function(){
-		
-	}
-
-	//Édition d'un item
-	that.edit_item = function(){
-		
-	}
 
 	//Bouton save
 	that.save = function(menu){
@@ -226,7 +221,7 @@ function GestionnaireMenu(){
 	that.recup_menu = function(menu){
 	 	//Menu.prototype.from_json retourne true en cas de succès
 	 	//et false si la récupération a échoué
-		menu.from_json(JSON.parse(
+		menu.from_json(
 			jq.ajax({
 				url : 'http://localhost:8080/component/en/menu', //récupère le menu publié
 				type : 'GET',
@@ -240,7 +235,7 @@ function GestionnaireMenu(){
 				error : function(msg) {
 				},
 				async : false
-			}).responseText));
+			}).responseText);
 
 	}
 
@@ -375,7 +370,7 @@ function GestionnaireMenu(){
 	//on déclenche l'ajout d'un item
 	that.button_add.click(function(){
 		that.add_item();
-	});
+	});lst_items
 
 	that.input_add.keydown(function(event){
 		if(!event.ctrlKey){
@@ -393,6 +388,7 @@ function GestionnaireMenu(){
 		return true;
 	});
 
+
 	//Quand on fait une modification dans le panel de configuration,
 	//on rajoute une étoile pour montrer à l'utilisateur qu'une modification doit être validée
 
@@ -402,7 +398,7 @@ function GestionnaireMenu(){
 				that.tab_settings.text(that.tab_settings.text() + " *");
 			}
 			if(event.which == '13'){
-				that.button_save.click();
+				that.submit_config.click();
 				return false; //on empêche le refresh de la page par l'event submit
 			}
 
@@ -421,7 +417,7 @@ function GestionnaireMenu(){
 				that.tab_settings.text(that.tab_settings.text() + " *");
 			}
 			if(event.which == '13'){
-				that.button_save.click();
+				that.submit_config.click();
 				return false; //on empêche le refresh de la page par l'event submit
 			}
 
@@ -452,7 +448,45 @@ function GestionnaireMenu(){
 
 	that.cancel_config.click(function(){
 		that.tab_settings.text("Configurer");
+		that.lst_items_settings.trigger("change");
 	});
+
+	that.delete_page.click(function(){
+		var id = that.lst_items_settings.find(":selected").val().replace(that.suff_lst_settings,'');
+		var item = that.menu.get(id);
+
+		if(item.get_nb_children() != 0){
+			bootbox.confirm("Cette page contient " + item.get_nb_children() + " enfants." + 
+				" Les pagents enfantes seront supprimées. Souhaitez-vous continuer?", function(result) {
+					if(result){
+						that.delete_from_interface(id);
+						that.menu.remove_item(id);
+					}
+			}); 
+		}else{
+			bootbox.confirm("Cette page sera définitivement supprimée. Souhaitez-vous continuer?", function(result) {
+					if(result){
+						that.delete_from_interface(id);
+						that.menu.remove_item(id);
+					}
+			}); 
+		}
+		jq("#" + item.get_parent().get_key() + that.suff_lst_settings).prop("selected", true);
+		that.lst_items_settings.trigger("change");
+		jq("#" + id + that.suff_table_children).remove();
+	});
+
+	that.delete_from_interface = function(id){
+		var item = that.menu.get(id);
+		var i;
+		for(i=0; i<item.get_nb_children(); ++i){
+			that.delete_from_interface(item.get_at(i).get_key());
+		}
+		jq("#" + id).remove();
+		jq("#" + id + that.suff_lst).remove();
+		jq("#" + id + that.suff_lst_settings).remove();
+		jq("#" + id + that.suff_lst_parents).remove();
+	}
 
 	that.submit_config.click(function(){
 		var txt = that.txt_title.val();
@@ -485,7 +519,7 @@ function GestionnaireMenu(){
 		var it_parent = that.menu.get(id_parent);
 
 		//Mise à jour de l'arborescence et de la liste de navigation
-		if(it_parent != item.get_parent()){
+		if(it_parent != null && it_parent != item.get_parent()){
 			that.apply_parent_change(item, it_parent);
 		}
 
@@ -545,6 +579,14 @@ function GestionnaireMenu(){
 		}
 	}
 
+	that.edit_parent.click(function(){
+		var id = that.lst_items_settings.find(":selected").val().replace(that.suff_lst_settings,'');
+		var it = that.menu.get(id);
+		var id_parent = it.parent.get_key();
+		jq("#" + id_parent + that.suff_lst_settings).prop('selected',true);
+		that.lst_items_settings.trigger("change");
+
+	});
 	that.lst_items_settings.change(function(){
 
 
@@ -567,6 +609,7 @@ function GestionnaireMenu(){
 			that.cancel_config.prop('disabled',true); //Reset la config ==> button
 			that.show_item.prop('disabled',true); //La page est visible dans le menu ==> checkbox
 			that.edit_parent.prop('disabled',true); //Configurer le parent ===> button
+			that.delete_page.prop('disabled',true);
 			that.txt_url.prop('disabled',true); //L'URL de la page ===> input
 		}
 		else{
@@ -583,6 +626,7 @@ function GestionnaireMenu(){
 			}
 			that.submit_config.prop('disabled',false); //Valider la config ==> button
 			that.cancel_config.prop('disabled',false); //Reset la config ==> button
+			that.delete_page.prop('disabled',false);
 			that.show_item.prop('disabled',false); //La page est visible dans le menu ==> checkbox
 
 			that.lst_parents.prop('disabled',false); //Liste des parents disponibles ==> select
@@ -596,15 +640,19 @@ function GestionnaireMenu(){
 			that.lst_parents.append("<option id='" + that.menu.get_key()
 				+ that.suff_lst_parents + "' value='" + that.menu.get_key() + "'>/</option>");
 			that.fill_lst_items_parents(that.menu, item);
+			jq("#" + item.get_parent().get_key() + that.suff_lst_parents).prop('selected', true);
 
 			if(item.get_parent() != that.menu){
 				that.item_parent.text(item.get_parent().get_txt()); //Parent à afficher ==> span
 			}
 
 			for(i=0; i<item.get_nb_children(); ++i){
-				that.items_children.append("<tr><td id=\"" + 
-					item.get_at(i).get_key() + that.suff_table_children +"\">" 
+
+				that.items_children.append("<tr><td id=" + 
+					item.get_at(i).get_key() + that.suff_table_children 
+					+ " class = " + that.class_children + ">" 
 					+ item.get_at(i).get_txt() + "</td></tr>");
+				that.set_click_child(item.get_at(i).get_key() + that.suff_table_children);
 			}
 			
 			that.show_item.prop('checked', item.visible); //La page est visible dans le menu ==> checkbox
@@ -615,14 +663,30 @@ function GestionnaireMenu(){
 
 	that.fill_lst_items_parents = function(racine, item){
 		var i;
+		var it;
 		for(i=0; i<racine.get_nb_children(); i++){
-			if(racine.get_at(i).get_key() != item.get_key()){
-				that.lst_parents.append("<option id='" + racine.get_at(i).get_key()
-				+ that.suff_lst_parents + "' value='" + racine.get_at(i).get_key() + "'>" + racine.get_at(i).get_txt() + "</option>");
-				that.fill_lst_items_parents(racine.get_at(i), item);
+			it = racine.get_at(i);
+			if(it.get_key() != item.get_key()){
+				that.lst_parents.append("<option id='" + it.get_key()
+				+ that.suff_lst_parents + "' value='" + it.get_key() + "'>" + it.get_txt() + "</option>");
+				that.fill_lst_items_parents(it, item);
 			}
+
 		}
 	}
+
+	that.set_click_child = function(id){
+		jq("#" + id).mouseover(function(){
+			jq(this).css( 'cursor', 'pointer' );
+		});
+		jq("#" + id).dblclick(function(){
+			jq(this).css( 'cursor', 'pointer' );
+			var id = jq(this).attr('id').replace(that.suff_table_children,'');
+			jq("#" + id + that.suff_lst_settings).prop('selected',true);
+			that.lst_items_settings.trigger("change");
+		});
+	}
+
 
 };
 
