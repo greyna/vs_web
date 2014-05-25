@@ -3,29 +3,7 @@
 var tis = this;
 
 // uses key of argument component
-publishComponent = function(component, callback) {
-	component.published = true;
-	jq.ajax({
-		url : 'http://localhost:8080/component/' + component.key,
-		type : 'POST',
-		dataType : 'text',
-		data : JSON.stringify(component.to_json()),
-		contentType : "application/json; charset=utf-8",
-		traditional : true,
-		success : function(msg) {
-			console.log("publishComponent réussi");
-			callback();
-		},
-		error : function(msg) {
-			console.log("publishComponent raté");
-		}
-	});
-}
-
-// uses key of argument component
 saveComponent = function(component, callback) {
-	component.newkey();
-	component.published = false;
 	jq.ajax({
 		url : 'http://localhost:8080/component/' + component.key,
 		type : 'POST',
