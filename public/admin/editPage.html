@@ -24,15 +24,13 @@
 				contentType : "application/json; charset=utf-8",
 				traditional : true,
 				success : function(msg) {
-					alert("success");
 				},
 				error : function(msg) {
-					alert("nooooo");
 				},
 				async : false
 			}).responseText));
-/*
-			var menu = Menu.prototype.create_from_json(jq.ajax({
+
+			var menu = Menu.prototype.create_from_json(JSON.parse(jq.ajax({
 				url : 'http://localhost:8080/component/en/menu', //récupère le menu publié
 				type : 'GET',
 				dataType : 'text',
@@ -40,22 +38,16 @@
 				contentType : "application/json; charset=utf-8",
 				traditional : true,
 				success : function(msg) {
-					alert("SUCCES!");
 				},
 				error : function(msg) {
-					alert("NOOOO!");
 				},
 				async : false
-			}).responseText);
-*/
+			}).responseText));
 
 			var source  = template.html;
-			alert(source);
 			var res = Handlebars.compile(source);
-			var context = {menu: 'test'};
-			alert(context);
+			var context = {menu: menu.type};
 			var html = res(context);
-			alert(html);
 			document.write(html);
         	document.close();
 
