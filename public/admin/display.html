@@ -1,0 +1,63 @@
+<html>
+	<head>
+		<script src="template.js"></script>
+		<script src="./edit/ckeditor.js"></script>
+		<script src="jquery.js"></script>    
+	    <script src="./menu_prototype.js"></script>
+        <script src="./bootstrap/js/bootstrap.min.js"></script>
+	    <script src="./menu_prototype.js"></script>
+	    <script src="./item_prototype.js"></script>
+	    <script src="./load.js"></script>
+	    <script src="./util.js"></script>
+		<script src="handlebars-v1.3.0.js"></script>
+		<link href="./edit/sample.css" rel="stylesheet">
+		<script>
+			
+			//utiliser plutôt le getComponent pour simplifier
+			//il faudra récup le template de la page
+			var template = new Template();
+			template.from_json(
+			JSON.parse(jq.ajax({
+				url : 'http://localhost:8080/component/1401007922419wkduse1eas', //récupère le menu publié
+				type : 'GET',
+				dataType : 'text',
+				data : '',
+				contentType : "application/json; charset=utf-8",
+				traditional : true,
+				success : function(msg) {
+				},
+				error : function(msg) {
+				},
+				async : false
+			}).responseText));
+
+			//on recup le menu
+			var context = JSON.parse(jq.ajax({
+				url : 'http://localhost:8080/component/en/menu', //récupère le menu publié
+				type : 'GET',
+				dataType : 'text',
+				data : '',
+				contentType : "application/json; charset=utf-8",
+				traditional : true,
+				success : function(msg) {
+				},
+				error : function(msg) {
+				},
+				async : false
+			}).responseText);
+
+			//on ajoute au contexte de la page à générer un exemple de body
+			var testbody = "<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris a ornare sapien, id semper odio. Morbi et feugiat erat. Fusce vitae tempor lorem. Nulla aliquet vulputate felis id accumsan. Mauris viverra convallis turpis, a ultrices risus tempor sed. Praesent in arcu sem. Cras pulvinar blandit dui id aliquam.</p>";
+
+			context['body'] = testbody;
+			var templatePage = Handlebars.compile(template.html);
+			var html = templatePage(context);
+			//on génère le document avec la page obtenue
+        	document.open();
+			document.write(html);
+        	document.close();
+		</script>
+	</head>
+	<body>
+	</body>
+</html>
