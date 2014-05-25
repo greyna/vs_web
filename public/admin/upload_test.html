@@ -1,10 +1,39 @@
 <html>
 <body>
-	<form method="POST" enctype="multipart/form-data"
-		action="/upload">
-		File to upload: <input type="file" name="file"><br /> Name: <input
-			type="text" name="name"><br /> <br /> <input type="submit"
-			value="Upload"> Press here to upload the file!
+	<form method="POST" enctype="multipart/form-data" action="/upload">
+		File to upload: <input type="file" id="file1" name="file" />
+		Name: <input type="text" id="name1" name="name"/><br />
+		File to upload: <input type="file" id="file2" name="file" />
+		Name: <input type="text" id="name2" name="name"/><br />
+		File to upload: <input type="file" id="file3" name="file" />
+		Name: <input type="text" id="name3" name="name"/><br />
+		<br />
+		<input type="submit" id="submit" value="Upload"/> Press here to upload the files!
 	</form>
 </body>
+<footer>
+    <script src="jquery.js"></script>
+    <script src="./util.js"></script>
+    <script type="text/javascript">
+		//Éviter les conflits entre browsers
+		var jq = jQuery.noConflict();
+
+		// var data = new FormData();
+		// jQuery.each($('#file')[0].files, function(i, file) {
+		//     data.append('file-'+i, file);
+		// });
+
+		// jq.ajax({
+		//     url: 'php/upload.php',
+		//     data: data,
+		//     cache: false,
+		//     contentType: false,
+		//     processData: false,
+		//     type: 'POST',
+		//     success: function(data){
+		//         alert(data);
+		//     }
+		// });
+	</script>
+</footer>
 </html>

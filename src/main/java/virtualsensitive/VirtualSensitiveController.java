@@ -31,6 +31,7 @@ import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.net.URI;
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.servlet.MultipartConfigElement;
 
@@ -97,22 +98,32 @@ public class VirtualSensitiveController extends WebMvcConfigurerAdapter {
 		return factory.createMultipartConfig();
 	}
 	@RequestMapping(value="/upload", method=RequestMethod.POST)
-	public @ResponseBody String handleFileUpload(@RequestParam("name") String name,
-			@RequestParam("file") MultipartFile file){
-		if (!file.isEmpty()) {
-			try {
-				byte[] bytes = file.getBytes();
-				BufferedOutputStream stream =
-						new BufferedOutputStream(new FileOutputStream(new File("public/" + name)));
-				stream.write(bytes);
-				stream.close();
-				return "You successfully uploaded " + name + " into " + "public/" + name;
-			} catch (Exception e) {
-				return "You failed to upload " + name + " => " + e.getMessage();
+	public @ResponseBody String handleFileUpload(@RequestParam("name") List<String> names,
+			@RequestParam("file") List<MultipartFile> files){
+		String message = "";
+		String name;
+		MultipartFile file;
+		
+		for (int i = 0; i < files.size(); ++i) {
+			name = names.get(i);
+			file = files.get(i);
+			if (!file.isEmpty()) {
+				try {
+					byte[] bytes = file.getBytes();
+					BufferedOutputStream stream =
+							new BufferedOutputStream(new FileOutputStream(new File("public/" + name)));
+					stream.write(bytes);
+					stream.close();
+					message +=  "You successfully uploaded " + name + " into " + "public/" + name + "<br/>";
+				} catch (Exception e) {
+					message +=  "You failed to upload " + name + " => " + e.getMessage() + "<br/>";
+				}
+			} else {
+				message += "You failed to upload " + name + " because the file was empty.<br/>";
 			}
-		} else {
-			return "You failed to upload " + name + " because the file was empty.";
 		}
+		
+		return message;
 	}
 	@RequestMapping(value="/upload/{name}", method=RequestMethod.DELETE)
 	@ResponseBody
