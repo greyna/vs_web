@@ -11,19 +11,27 @@
     <script src="./load.js"></script>
 	<link href="sample.css" rel="stylesheet">
 	<style>
-
 		#editable
 		{
 			padding: 10px;
 			float: left;
 		}
-
 	</style>
 </head>
 <body>
-{{menu}}
+	<ul>
+	  {{#each children}}
+	  <li>{{txt}}
+	{{#if children}}<ul>{{/if}}
+	{{#each children}}
+	  <li>{{txt}}</li>
+	  {{/each}}
+	{{#if children}}</ul>{{/if}}
+	</li>
+	  {{/each}}
+	</ul>
 <div id="editable" contenteditable="true">
-<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris a ornare sapien, id semper odio. Morbi et feugiat erat. Fusce vitae tempor lorem. Nulla aliquet vulputate felis id accumsan. Mauris viverra convallis turpis, a ultrices risus tempor sed. Praesent in arcu sem. Cras pulvinar blandit dui id aliquam.</p>
+{{body}}
 </div>
 </body>
 </html>

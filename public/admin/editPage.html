@@ -14,6 +14,7 @@
 		<script>
 			
 			//utiliser plutôt le getComponent pour simplifier
+			//il faudra récup le template de la page
 			var template = new Template();
 			template.from_json(
 			JSON.parse(jq.ajax({
@@ -30,7 +31,8 @@
 				async : false
 			}).responseText));
 
-			var menu = Menu.prototype.create_from_json(JSON.parse(jq.ajax({
+			//on recup le menu
+			var context = JSON.parse(jq.ajax({
 				url : 'http://localhost:8080/component/en/menu', //récupère le menu publié
 				type : 'GET',
 				dataType : 'text',
@@ -42,15 +44,19 @@
 				error : function(msg) {
 				},
 				async : false
-			}).responseText));
+			}).responseText);
 
-			var source  = template.html;
-			var res = Handlebars.compile(source);
-			var context = {menu: menu.type};
-			var html = res(context);
+			//on ajoute au contexte de la page à générer un exemple de body
+			var testbody = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris a ornare sapien, id semper odio. Morbi et feugiat erat. Fusce vitae tempor lorem. Nulla aliquet vulputate felis id accumsan. Mauris viverra convallis turpis, a ultrices risus tempor sed. Praesent in arcu sem. Cras pulvinar blandit dui id aliquam.";
+
+			context['body'] = testbody;
+			var templatePage = Handlebars.compile(template.html);
+			var html = templatePage(context);
+			//on génère le document avec la page obtenue
+        	document.open();
 			document.write(html);
         	document.close();
-
+        	//ajout de l'event ctrl+s pour la sauvegarde à venir
 			jq(document).keyup(function(e){
 				e.preventDefault();
 				if(e.ctrlKey && e.which === 83){  
