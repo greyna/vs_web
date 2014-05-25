@@ -1,13 +1,13 @@
 <html>
 <body>
 	<form method="POST" enctype="multipart/form-data" action="/upload">
-		File to upload: <input type="file" id="file1" name="file" />
-		Name: <input type="text" id="name1" name="name"/><br />
-		File to upload: <input type="file" id="file2" name="file" />
-		Name: <input type="text" id="name2" name="name"/><br />
-		File to upload: <input type="file" id="file3" name="file" />
-		Name: <input type="text" id="name3" name="name"/><br />
-		<br />
+		<table id="fileTable"><tbody>
+			<tr>
+				<td>[0] Name : <input type="text" id="name0" name="name"/><br /></td>
+				<td>File to upload : <input type="file" id="file0" name="file" /></td>
+			</tr>
+		</tbody></table><br />
+		<input id="addFile" type="button" value="Add File" /> Press here to add an upload field.<br/>
 		<input type="submit" id="submit" value="Upload"/> Press here to upload the files!
 	</form>
 </body>
@@ -17,7 +17,14 @@
     <script type="text/javascript">
 		//Éviter les conflits entre browsers
 		var jq = jQuery.noConflict();
-
+		jq('#addFile').click(function() {
+			var newFileIndex = jq('#fileTable tbody').children().length;
+	        jq('#fileTable tbody').append(
+				'<tr>'+
+					'<td>['+newFileIndex+'] Name : <input type="text" id="name'+newFileIndex+'" name="name"/><br /></td>'+
+					'<td>File to upload : <input type="file" id="file'+newFileIndex+'" name="file" /></td>'+
+				'</tr>');
+		});
 		// var data = new FormData();
 		// jQuery.each($('#file')[0].files, function(i, file) {
 		//     data.append('file-'+i, file);
