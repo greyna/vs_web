@@ -87,11 +87,23 @@ function Item(){
 
 	that.remove_item = function(key){
 		var i;
-		for(i=0; i<that.get_nb_children() && that.get_at(i).key != key; ++i);
-		for(;i<that.get_nb_children()-1; ++i){
-			that.children[i] = that.children[i+1];
+		var j;
+		for(i=0; i<that.get_nb_children(); ++i){
+			if(that.get_at(i).key != key){
+				if(that.get_at(i).remove_item(key)){
+					return true;
+				}
+			}
+			else{
+				delete that.children[i];
+				for(j=i; j<that.get_nb_children() -1; ++j){
+					that.children[j] = that.children[j+1];
+				}
+				that.pop();
+				return true;
+			}
 		}
-		that.pop();
+		return false;
 	}
 
 	that.pop = function(){
@@ -212,7 +224,7 @@ Item.prototype.create_from_json = function(json) {
 		return null;
 
 	if(json.constructor == String)
-		var i;//json = JSON.parse(json);
+		json = JSON.parse(json);
 	else{
 		if(json.constructor != Object)
 			return null;
