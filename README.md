@@ -5,7 +5,7 @@ VS UTC API08 website may 2014
 Se placer avec le terminal dans le dossier, puis mvn spring-boot:run
 Ou bien le jar présent dans le dossier avec java -jar vs-web-alpha.jar
 
-Pour couchbase, on trouvera les vues dans le dossier public/admin/ par exemple v_component _couhbase.js
+Pour couchbase, on trouvera les vues dans le fichier public/admin/couchbase_views.js . Suivez les commentaires !
 
 Pour tester l'appli, RDV au http://localhost:8080/admin/index.html !
 
