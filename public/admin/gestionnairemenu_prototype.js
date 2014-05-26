@@ -323,6 +323,7 @@ function GestionnaireMenu(){
 	///////////////////////
 	that.tab_settings.click(function (e) {
 		var i;
+		var liste = [];
 		that.mode = "settings";
 		e.preventDefault();
 		jq(this).tab('show');
@@ -333,7 +334,10 @@ function GestionnaireMenu(){
 
 		//On remplit la liste des templates
 		if(jq("#lst_templates option").size() == 0 ){
-			that.recup_all_templates(that.lst_templates);	
+			getTemplates(liste, function(){
+				that.render_all_templates(liste, that.lst_templates);
+			});
+				
 		}
 		//On remplit la liste des items si besoin est
 		if(jq("#lst_items_settings option").size() == 0 ){
@@ -344,36 +348,27 @@ function GestionnaireMenu(){
 
 	});
 
-	that.recup_all_templates = function(lst){
+	that.render_all_templates = function(templates, lst){
 		var i;
 		var template;
-		jq.ajax({
-			url : 'http://localhost:8080/listTemplates',
-			type : 'GET',
-			dataType : 'json',
-			data : '',
-			contentType : "application/json; charset=utf-8",
-			traditional : true,
-			success : function(msg) {
-				for(i=0; i<msg.length; ++i){
-					template = msg[i];
-					lst.after("<option id=" + template.key + " value=" + template.key + ">"
-					+ template.type + "</option>");
-				}
-			},
-			error : function(msg) {
-				bootbox.dialog({
-					message: "Erreur lors de la récupération des templates",
-					title: "Erreur",
-					buttons: {
-						danger: {
-							label: "ok",
-							className: "btn-danger",
-						}
+		if(templates.length == 0){
+			bootbox.dialog({
+				message: "Erreur lors de la récupération des templates",
+				title: "Erreur",
+				buttons: {
+					danger: {
+						label: "ok",
+						className: "btn-danger",
 					}
-				});
-			},
-		});
+				}
+			});
+		}else{
+			for(i=0; i<msg.length; ++i){
+				template = templates[i];
+				lst.after("<option id=" + template.key + " value=" + template.key + ">"
+				+ template.type + "</option>");
+			}
+		}
 		
 	}
 
@@ -672,8 +667,8 @@ function GestionnaireMenu(){
 			item = that.menu.get(id);
 
 			that.txt_title.prop('disabled',false); //Titre de l'item ==> input
-
-			if(item.get_parent() != that.menu){
+			
+			if(item.get_parent().get_key() != that.menu.get_key() && !(item.get_parent().type == "menu")){
 				that.edit_parent.prop('disabled',false); //Configurer le parent ===> button
 			}else{
 				that.edit_parent.prop('disabled',true); //Configurer le parent ===> button
@@ -697,7 +692,7 @@ function GestionnaireMenu(){
 			that.fill_lst_items_parents(that.menu, item);
 			jq("#" + item.get_parent().get_key() + that.suff_lst_parents).prop('selected', true);
 
-			if(item.get_parent() != that.menu){
+			if(item.get_parent().get_key() != that.menu.get_key() && !(item.get_parent().type == "menu")){
 				that.item_parent.text(item.get_parent().get_txt()); //Parent à afficher ==> span
 			}
 
@@ -715,52 +710,21 @@ function GestionnaireMenu(){
 			that.span_url.text(item.get_url());
 
 			//On vérifie si l'item a un template/une page
-			if((template = that.get_template(item)) != null){
-				jq("#" + template.key).prop('selected' , true);
-				that.lst_templates.trigger('change');
-			}
+			var page = new Page();
+			page.key = item.page;
+			
+			getComponent(page, function(){
+				var template = new Template();
+				template = page.template;
+				getComponent(template, function(){
+					jq("#" + template.key).prop('selected' , true);
+					that.lst_templates.trigger('change');
+				});
+			});
 
 		}
 	});
 
-
-	that.get_template = function(item){
-		var page = new Page();
-		var template = null;
-		jq.ajax({
-			url : 'http://localhost:8080//component/' + item.page,
-			type : 'GET',
-			dataType : 'json',
-			data : '',
-			contentType : "application/json; charset=utf-8",
-			success : function(msg) {
-				page.from_json(msg);
-			},
-			error : function(msg) {
-				page = null;
-			},
-			async : false
-		});
-
-		if(page != null){
-			jq.ajax({
-				url : 'http://localhost:8080//component/' + page.template,
-				type : 'GET',
-				dataType : 'json',
-				data : '',
-				contentType : "application/json; charset=utf-8",
-				success : function(msg) {
-					template = new Template();
-					template.from_json(msg);
-				},
-				error : function(msg) {
-				},
-				async : false
-			});
-		}
-
-		return template;
-	}
 
 	that.fill_lst_items_parents = function(racine, item){
 		var i;
