@@ -4,14 +4,32 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
 <body>
-	<form id="upload" method="POST" enctype="multipart/form-data" action="/upload">
-		<table id="fileTable"><tbody></tbody></table>
-		<br />
-		<input id="addFile" type="button" value="Add File" /> Press here to add an upload field.<br/>
-		<input type="submit" id="submit" value="Upload"/> Press here to upload the files!
-	</form>
-	<br/>
-	<div id="result"><div/>
+	<div style="position: fixed;top: 1em;right: 1em;">
+		<div style="margin:20px; margin-top:5px">
+			<div style="position: fixed;right: 1em;"><input type="button" alt="Upload" style="background: url(../logoUpload.png);width:23px;height:23px;font-size:10px;margin:0px;padding:0px;" onclick="if (this.parentNode.parentNode.getElementsByTagName('div')[2].getElementsByTagName('div')[0].style.display != '') { this.parentNode.parentNode.getElementsByTagName('div')[2].getElementsByTagName('div')[0].style.display = ''; } else { this.parentNode.parentNode.getElementsByTagName('div')[2].getElementsByTagName('div')[0].style.display = 'none'; }" />
+			</div>
+			<div style="position: fixed;margin-top:40px;right: 1em;"><input type="button" alt="Aide" style="background: url(../question.png);width:23px;height:23px;font-size:10px;margin:0px;padding:0px;" onclick="if (this.parentNode.parentNode.getElementsByTagName('div')[5].getElementsByTagName('div')[0].style.display != '') { this.parentNode.parentNode.getElementsByTagName('div')[5].getElementsByTagName('div')[0].style.display = ''; } else { this.parentNode.parentNode.getElementsByTagName('div')[5].getElementsByTagName('div')[0].style.display = 'none'; }" />
+			</div>
+			<div >
+				<div style="display: none;">
+					<form id="upload" method="POST" enctype="multipart/form-data" action="/upload">
+						<table id="fileTable"><tbody></tbody></table>
+						<br />
+						<input id="addFile" type="button" value="Add File" /> Press here to add an upload field.<br/>
+						<input type="submit" id="submit" value="Upload"/> Press here to upload the files!
+					</form>
+					<br/>
+					<div id="result"></div>
+				</div>
+			</div>
+			<div >
+				<div style="display: none;">
+					<p><em>Ce composant permet l'upload des images sur le serveur. Vous pouvez ainsi ajouter vos images pour pouvoir les utiliser plus tard!</em></p>
+				</div>
+			</div>
+		</div>
+
+	</div>
 </body>
 <footer>
     <script src="jquery.js"></script>
