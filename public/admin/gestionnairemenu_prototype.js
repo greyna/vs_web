@@ -1,4 +1,5 @@
 
+
 //////////////////////////////
 //PROTOTYPE GestionnaireMenu//
 //////////////////////////////
@@ -53,12 +54,13 @@ function GestionnaireMenu(){
 	that.show_item = jq("#show_item"); //La page est visible dans le menu ==> checkbox
 	that.edit_parent = jq("#edit_parent"); //Configurer le parent ===> button
 	that.txt_url = jq("#txt_url"); //L'URL de la page ===> input
+	that.lst_templates = jq("#lst_templates"); //la liste des templates disponibles ==> select
 	that.suff_lst_settings = "_lst_settings";
 	that.span_url = jq("#span_url");
 	that.suff_lst_parents = "_lst_parents";
 	that.suff_table_children = "_table_children";
 	that.class_children = "children";
-
+	that.lst_templates = jq("#lst_templates");
 
 	//////////////////////////////////
 	//           METHODES           //
@@ -243,7 +245,7 @@ function GestionnaireMenu(){
 
 	}
 
-	//Render le menu en mode structure
+//Render le menu en mode structure
 	that.render_menu = function(menu) {
 
 		var i;
@@ -259,10 +261,10 @@ function GestionnaireMenu(){
 			parent = it.parent.get_key();
 			//Soit on crée une nouvelle liste soit on insère un nouvel élément
 			if(it.get_ordre() == 0){
-				jq("#" + parent + ">ul").append("<li class = 'item'  id='" + it.get_key() 
+				jq("#" + parent).append("<ul><li class = 'item'  id='" + it.get_key() 
 					+ "'><a href='./editPage.html?idpage=" +  it.get_key() 
 					+ "&lang=" + that.menu.get_lang() 
-					+ "' target='_blank'>" + it.get_txt() + "</a></li>");
+					+ "' target='_blank'>" + it.get_txt() + "</a></li></ul>");
 
 			}
 			else{
@@ -282,7 +284,7 @@ function GestionnaireMenu(){
 	};	
 
 
-	//Charger le menu
+//Charger le menu
 	//On charge par défaut le dernier menu de la langue sur laquelle l'utilisateur travaillait
 	that.load = function(langue){
 
@@ -329,13 +331,51 @@ function GestionnaireMenu(){
 		that.panel_settings.removeClass("hidden");
 		that.panel_structure.addClass("hidden");
 
+		//On remplit la liste des templates
+		if(jq("#lst_templates option").size() == 0 ){
+			that.recup_all_templates(that.lst_templates);	
+		}
 		//On remplit la liste des items si besoin est
 		if(jq("#lst_items_settings option").size() == 0 ){
 			that.fill_lst_items_settings(that.menu);
 			that.lst_items_settings.trigger("change");
 		}
 
+
 	});
+
+	that.recup_all_templates = function(lst){
+		var i;
+		var template;
+		jq.ajax({
+			url : 'http://localhost:8080/listTemplates',
+			type : 'GET',
+			dataType : 'json',
+			data : '',
+			contentType : "application/json; charset=utf-8",
+			traditional : true,
+			success : function(msg) {
+				for(i=0; i<msg.length; ++i){
+					template = msg[i];
+					lst.after("<option id=" + template.key + " value=" + template.key + ">"
+					+ template.type + "</option>");
+				}
+			},
+			error : function(msg) {
+				bootbox.dialog({
+					message: "Erreur lors de la récupération des templates",
+					title: "Erreur",
+					buttons: {
+						danger: {
+							label: "ok",
+							className: "btn-danger",
+						}
+					}
+				});
+			},
+		});
+		
+	}
 
 	that.fill_lst_items_settings = function(racine){
 		var i;
@@ -614,6 +654,7 @@ function GestionnaireMenu(){
 		var id = jq(this).find(":selected").val();
 		var item;
 		var i;
+		var template = null;
 		if(id == null){
 			that.txt_title.prop('disabled',true); //Titre de l'item ==> input
 			that.lst_parents.prop('disabled',true); //Liste des parents disponibles ==> select
@@ -623,6 +664,7 @@ function GestionnaireMenu(){
 			that.edit_parent.prop('disabled',true); //Configurer le parent ===> button
 			that.delete_page.prop('disabled',true);
 			that.txt_url.prop('disabled',true); //L'URL de la page ===> input
+			that.lst_templates.prop('disabled',true);
 		}
 		else{
 
@@ -643,6 +685,7 @@ function GestionnaireMenu(){
 
 			that.lst_parents.prop('disabled',false); //Liste des parents disponibles ==> select
 			that.txt_url.prop('disabled',false); //L'URL de la page ===> input
+			that.lst_templates.prop('disabled',false);
 
 
 
@@ -670,8 +713,54 @@ function GestionnaireMenu(){
 			that.show_item.prop('checked', item.visible); //La page est visible dans le menu ==> checkbox
 			that.txt_url.val(item.get_url()); //L'URL de la page ===> input
 			that.span_url.text(item.get_url());
+
+			//On vérifie si l'item a un template/une page
+			if((template = that.get_template(item)) != null){
+				jq("#" + template.key).prop('selected' , true);
+				that.lst_templates.trigger('change');
+			}
+
 		}
 	});
+
+
+	that.get_template = function(item){
+		var page = new Page();
+		var template = null;
+		jq.ajax({
+			url : 'http://localhost:8080//component/' + item.page,
+			type : 'GET',
+			dataType : 'json',
+			data : '',
+			contentType : "application/json; charset=utf-8",
+			success : function(msg) {
+				page.from_json(msg);
+			},
+			error : function(msg) {
+				page = null;
+			},
+			async : false
+		});
+
+		if(page != null){
+			jq.ajax({
+				url : 'http://localhost:8080//component/' + page.template,
+				type : 'GET',
+				dataType : 'json',
+				data : '',
+				contentType : "application/json; charset=utf-8",
+				success : function(msg) {
+					template = new Template();
+					template.from_json(msg);
+				},
+				error : function(msg) {
+				},
+				async : false
+			});
+		}
+
+		return template;
+	}
 
 	that.fill_lst_items_parents = function(racine, item){
 		var i;
