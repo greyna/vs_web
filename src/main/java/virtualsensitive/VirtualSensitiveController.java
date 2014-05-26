@@ -260,7 +260,39 @@ public class VirtualSensitiveController extends WebMvcConfigurerAdapter {
 			return new ResponseEntity<String>("", HttpStatus.NOT_FOUND);
 		}
 	}
+	
+	// Give back the list of all components identified by type
+	@RequestMapping(value="/listComponentsByType/{type}", method=RequestMethod.GET)
+	@ResponseBody
+	public ResponseEntity<String>  getAllComponentsByType(@PathVariable("type") String type) throws Exception {
+		View view = client.getView("component", "v_all_components_by_type");
 
+		Query query = new Query();
+		query.setKey(type);
+		query.setIncludeDocs(true);
+
+		System.out.println("\ngetAllComponentsByType begins");
+		ViewResponse response = null;
+		response = client.query(view, query);
+
+		boolean hasResponses = false;
+		StringBuilder result = new StringBuilder("[ ");
+		for(ViewRow row : response) {
+			result.append(row.getDocument().toString());
+			result.append(", ");
+			hasResponses = true;
+		}
+
+		System.out.println("ngetAllComponentsByType ends");
+		if (hasResponses) {
+			result.delete(result.length()-2, result.length());
+			result.append(" ]");
+			return new ResponseEntity<String>(result.toString(), HttpStatus.OK);
+		}
+		else {
+			return new ResponseEntity<String>("", HttpStatus.NOT_FOUND);
+		}
+	}
 	// Give back the list of all templates identified by type and language
 	@RequestMapping(value="/listTemplates", method=RequestMethod.GET)
 	@ResponseBody

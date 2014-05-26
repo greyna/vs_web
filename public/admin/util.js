@@ -129,6 +129,33 @@ getAllComponents = function(liste, lang, type, classe_js_component, callback) {
 	});
 }
 
+getAllComponentsByType = function(liste, type, classe_js_component, callback) {
+	jq.ajax({
+		url : 'http://localhost:8080/listComponentsByType/' + type,
+		type : 'GET',
+		dataType : 'text',
+		data : '',
+		contentType : "application/json; charset=utf-8",
+		traditional : true,
+		success : function(msg) {
+
+			l = JSON.parse(msg);
+			for (var i = 0; i < l.length; i++) {
+				if (l[i].lang !== "template") {
+					compo = new tis[classe_js_component];
+					compo.from_json(l[i]);
+				    liste.push(compo);
+				}
+			}
+			console.log("getAllComponentsByType réussi");
+			callback();
+		},
+		error : function(msg) {
+			console.log("getAllComponentsByType raté");
+		}
+	});
+}
+
 // string classe_js_component doit avoir exactement le nom de votre classe js (par exemple "Menu" ou "Template")
 getTemplates = function(liste, callback) {
 	jq.ajax({
