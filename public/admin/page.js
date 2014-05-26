@@ -1,4 +1,4 @@
-// template.js
+// page.js
 
 // component on which every util.js procedures can perform
 function Page(){
@@ -15,7 +15,8 @@ function Page(){
 	that.published = false; //bool
 	that.lang; //string
 	that.body; //string
-	that.template; //id du template
+	that.templatetype; // type du template
+	that.name;
 
 	that.to_json = function(){
 		var json = new Object();
@@ -24,7 +25,9 @@ function Page(){
 		json.release = that.release;
 		json.published = that.published;
 		json.lang = that.lang;
-		json.html = that.html;
+		json.body = that.body;
+		json.templatetype = that.templatetype;
+		json.name = that.name;
 		return json;
 	}
 
@@ -34,6 +37,8 @@ function Page(){
 		that.release = json.release;
 		that.published = json.published;
 		that.lang = json.lang;
-		that.html = json.html;
+		that.body = json.body;
+		that.templatetype = json.templatetype;
+		that.name = json.name;
 	}
 }	

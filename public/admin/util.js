@@ -2,6 +2,22 @@
 
 var tis = this;
 
+// Paramètres GET de l'url (vs.com?param1=1 will return "param1=1")
+function getSearchParameters() {
+      var prmstr = window.location.search.substr(1);
+      return prmstr != null && prmstr != "" ? transformToAssocArray(prmstr) : {};
+}
+
+function transformToAssocArray( prmstr ) {
+    var params = {};
+    var prmarr = prmstr.split("&");
+    for ( var i = 0; i < prmarr.length; i++) {
+        var tmparr = prmarr[i].split("=");
+        params[tmparr[0]] = tmparr[1];
+    }
+    return params;
+}
+
 Array.prototype.remove = function(from, to) {
   var rest = this.slice((to || from) + 1 || this.length);
   this.length = from < 0 ? this.length + from : from;
@@ -67,7 +83,7 @@ deleteComponent = function(component, callback) {
 }
 
 // uses lang and type of argument component
-function getPublishedComponent(component, callback) {
+function getPublishedComponent(component, success_callback, failure_callback) {
 	jq.ajax({
 		url : 'http://localhost:8080/component/' + component.lang + '/' + component.type,
 		type : 'GET',
@@ -78,10 +94,11 @@ function getPublishedComponent(component, callback) {
 		success : function(msg) {
 			console.log("getPublishedComponent réussi");
 			component.from_json(JSON.parse(msg));
-			callback();
+			success_callback();
 		},
 		error : function(msg) {
 			console.log("getPublishedComponent raté");
+			failure_callback();
 		}
 	});
 }
@@ -134,6 +151,23 @@ getTemplates = function(liste, callback) {
 		},
 		error : function(msg) {
 			console.log("getTemplates raté");
+		}
+	});
+}
+
+deployHtml = function(html, name) {
+	jq.ajax({
+		url : 'http://localhost:8080/page/' + name,
+		type : 'POST',
+		dataType : 'text',
+		data : html,
+		contentType : "application/json; charset=utf-8",
+		traditional : true,
+		success : function(msg) {
+			console.log("deployHtml réussi : "+msg);
+		},
+		error : function(msg) {
+			console.log("deployHtml raté : "+msg);
 		}
 	});
 }
