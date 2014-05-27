@@ -13,8 +13,8 @@ function Page(){
 	that.type = "page"; 
 	that.release; //string
 	that.published = false; //bool
-	that.lang; //string
-	that.body; //string
+	that.lang = "en"; //string
+	that.body = "Insérer contenu ici"; //string
 	that.templatetype; // type du template
 	that.name;
 
@@ -41,4 +41,19 @@ function Page(){
 		that.templatetype = json.templatetype;
 		that.name = json.name;
 	}
+
+	that.clone = function() {
+		var t = new Page();
+
+		t.key = that.key;
+		t.type = that.type;
+		t.release = that.release;
+		t.published = that.published;
+		t.lang = that.lang;
+		t.body = that.body;
+		t.templatetype = that.templatetype;
+		t.name = that.name;
+
+		return t;
+	};
 }	

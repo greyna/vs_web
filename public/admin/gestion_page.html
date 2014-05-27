@@ -1,0 +1,92 @@
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<title>Gestion des pages</title>
+	<link rel="stylesheet" type="text/css" href="./bootstrap/css/bootstrap.min.css" />
+	<link rel="stylesheet" type="text/css" href="./bootstrap/css/bootstrap-theme.min.css" />
+	<link rel="stylesheet" type="text/css" href="arborescence_css.css" />
+	<link rel="stylesheet" type="text/css" href="style.css" />
+</head>
+<body>
+<div class="container">
+
+	<div class="panel panel-default">
+
+
+
+		<div class="panel-heading" style="height:100px;">
+			<h1 style="width:48%;float:left;">Gestion des pages</h1>
+			<form class="navbar-form navbar-left" role="search" style="width:48%;float:right;margin-top:30px;">
+				Page
+				<select id="lst_page" class="form-control">
+					<option id="lst_page_choisir" value="lst_page_choisir">Choisir...</option>
+				</select>
+				<button id="add_page" type="button" class="btn btn-default " style="margin-left:40px;">Créer page</button>
+			</form>
+		</div>
+
+
+		<div class="panel-body">
+			<form class="form-horizontal" role="form" style="width:48%;float:left;">
+			  	<div class="form-group" style="margin-top:15px;">
+					<label for="nom_page" class="col-sm-2 control-label">Nom</label>
+					<div class="col-sm-10">
+						<input id="nom_page" type="text" class="form-control" placeholder="Nom de la page">
+					</div>
+
+					<label for="lst_template" class="col-sm-3 control-label" style="margin-top:15px;">Template</label>
+					<div class="col-sm-8" style="margin-top:15px;">
+						<select id="lst_template" class="form-control">
+							<option id="lst_template_choisir" value="lst_template_choisir">Choisir...</option>
+						</select>
+					</div>
+				</div>
+
+				
+				<a id="link_edit" href="http://localhost:8080/admin/editPage.html?page=1401117622618w0agxpvv9qlivn29" target="_blank">Editer la page du site web</a><br/><br/>
+				<button id="save_page" type="button" class="btn btn-default ">Enregistrer</button>
+				<button id="delete_page" type="button" class="btn btn-default ">Supprimer</button>
+			</form>
+			<div style="width:48%;float:right;text-align:center;">
+				<div id="pub" style="margin-top:40px;">? PUBLIE ?</div><br/><a id="link_web" href="http://localhost:8080/testEditPage.html" target="_blank">Voir la page du site web</a>
+			</div>
+		</div>
+
+	</div>
+
+</div>
+
+
+
+
+</body>
+<footer>
+	<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="jquery.js"></script>
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <script src="./bootstrap/js/bootstrap.min.js"></script>
+
+    <script src="./util.js"></script>
+
+    <script src="./template.js"></script>
+    <script src="./template_ui.js"></script>
+
+    <script src="./gestionnairemenu_prototype.js"></script>
+    <script src="./menu_prototype.js"></script>
+    <script src="./item_prototype.js"></script>
+    <script src="page.js"></script>
+    <script src="page_ui.js"></script>
+
+    <script type="text/javascript">
+		//Éviter les conflits entre browsers
+		var jq = jQuery.noConflict();
+
+		var p = new PageUi();
+		p.load(function(){
+			console.log("PageUi loading finished");
+		});
+	</script>
+</footer>
+</html>

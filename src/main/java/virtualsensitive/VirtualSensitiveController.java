@@ -283,7 +283,7 @@ public class VirtualSensitiveController extends WebMvcConfigurerAdapter {
 			hasResponses = true;
 		}
 
-		System.out.println("ngetAllComponentsByType ends");
+		System.out.println("getAllComponentsByType ends");
 		if (hasResponses) {
 			result.delete(result.length()-2, result.length());
 			result.append(" ]");

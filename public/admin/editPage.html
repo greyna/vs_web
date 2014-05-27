@@ -56,6 +56,7 @@ function EditPage() {
 			that.savePage();
 		});
 		jq("#deploy").click(function (e) {
+			that.page.published = true;
 			that.savePage();
 			deployHtml(that.renderPage(), that.page.name+".html");
 		});
