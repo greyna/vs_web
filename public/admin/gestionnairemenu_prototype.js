@@ -27,7 +27,6 @@ function GestionnaireMenu(){
 
 	//NAVBAR SUPERIEURE
 	that.button_add = jq("#add_item"); //ajout d'un item
-	that.input_add = jq("#txt_item"); //nom de l'item à ajouter
 	that.lst_items = jq("#lst_items"); //liste des items
 	that.suff_lst = "_lst"; //suffixe des IDs des items dans la liste
 	that.button_cancel = jq("#cancel"); //annuler toutes les saisies
@@ -53,14 +52,14 @@ function GestionnaireMenu(){
 	that.delete_page = jq("#delete_page"); //Supprimer la page ==> button
 	that.show_item = jq("#show_item"); //La page est visible dans le menu ==> checkbox
 	that.edit_parent = jq("#edit_parent"); //Configurer le parent ===> button
-	that.txt_url = jq("#txt_url"); //L'URL de la page ===> input
-	that.lst_templates = jq("#lst_templates"); //la liste des templates disponibles ==> select
+
+	that.lst_pages = jq("#lst_pages"); //la liste des pages disponibles ==> select
 	that.suff_lst_settings = "_lst_settings";
-	that.span_url = jq("#span_url");
 	that.suff_lst_parents = "_lst_parents";
 	that.suff_table_children = "_table_children";
 	that.class_children = "children";
-	that.lst_templates = jq("#lst_templates");
+	that.lst_pages = jq("#lst_pages");
+	that.suff_lst_page = "_page";
 
 	//////////////////////////////////
 	//           METHODES           //
@@ -69,17 +68,20 @@ function GestionnaireMenu(){
 
 	//Ajout d'un item
 	that.add_item = function(){
-		var txt = that.input_add.val(); //on récupère le titre de l'item
+		var txt = that.lst_pages.find(":selected").text(); //on récupère le titre de l'item
 		var previous_it;
 		var parent;
 		var it;
 		var it_parent;
 		var previous;
 
-		//Si le texte est vide on ne fait rien
-		if(jq.trim(txt) === ""){
-			that.input_add.val('');
-			that.input_add.focus();
+		if(that.lst_pages.find(":selected").text() === "--Choisissez une page--"){
+			that.lst_pages.focus();
+			return;
+		}
+
+		if(that.lst_items.find(":selected").text() === "--Choisissez un parent--"){
+			that.lst_items.focus();
 			return;
 		}
 
@@ -89,7 +91,6 @@ function GestionnaireMenu(){
 		//Création de l'item
 		it = new Item();
 		it.set_txt(txt);
-		it.set_url(txt);
 
 		//On récupère l'item qui sera le parent
 		it_parent = that.menu.get(parent);
@@ -109,6 +110,9 @@ function GestionnaireMenu(){
 		else{
 			previous = it_parent.get_key() ;
 		}
+
+		//On récupère le template associé
+		it.template = that.lst_pages.find(":selected").val().replace(that.suff_lst_page,'');
 
 
 		//Si l'insertion échoue dans l'objet Menu du gestionnaire, on sort de la fonction
@@ -146,9 +150,9 @@ function GestionnaireMenu(){
 				+ "&lang=" + that.menu.get_lang()
 				+ "' target='_blank'>" + it.get_txt() + "</a></li></ul>");
 		}
-
-		//On se replace ensuite dans l'input
-		that.input_add.select();
+		jq("#" + item.key).addClass("hidden_pages");	
+		//On se replace ensuite dans la liste
+		that.lst_pages.focus();
 
 	}
 
@@ -166,7 +170,6 @@ function GestionnaireMenu(){
 		//Récupérer toutes les pages du Menu
 		//pages = that.pages_of_menu(that.menu);
 		//Delete chaque page de la BD
-		//Modifier l'URL de chaque page
 		//Enregistrer chaque nouvelle page.
 
 		//TODO : variabiliser la langue
@@ -219,7 +222,7 @@ function GestionnaireMenu(){
 		that.item_parent.val("");
 		that.items_children.empty();
 		that.show_item.attr('checked', false);
-		that.txt_url.val("");
+	
 	}
 
 	//Récupérer le menu du backend
@@ -278,16 +281,21 @@ function GestionnaireMenu(){
 				+ it.get_txt() + "</option>");
 			//On fait le même traitement pour les enfants
 			that.render_menu(it);
-
+			if(it.isVisible()){
+				jq("#" + it.key).removeClass("hidden_pages");
+				jq("#" + it.key).addClass("shown_pages");	
+			}else{
+				jq("#" + it.key).removeClass("shown_pages");
+				jq("#" + it.key).addClass("hidden_pages");	
+			}
 		}
-
 	};	
 
 
 //Charger le menu
 	//On charge par défaut le dernier menu de la langue sur laquelle l'utilisateur travaillait
 	that.load = function(langue){
-
+		var liste = [];
 		//On crée le menu
 		that.menu = new Menu();
 		that.recup_menu(that.menu);
@@ -301,6 +309,14 @@ function GestionnaireMenu(){
 
 		//On render le menu en html
 		that.render_menu(that.menu);
+		//On remplit la liste des pages
+		
+		if(jq("#lst_pages option").size() == 1 ){
+			getAllComponentsByType(liste, "page", "Page", function(){
+				that.render_all_pages(liste, that.lst_pages, that.suff_lst_pages);
+			});
+				
+		}
 	}
 
 
@@ -332,13 +348,6 @@ function GestionnaireMenu(){
 		that.panel_settings.removeClass("hidden");
 		that.panel_structure.addClass("hidden");
 
-		//On remplit la liste des templates
-		if(jq("#lst_templates option").size() == 0 ){
-			getTemplates(liste, function(){
-				that.render_all_templates(liste, that.lst_templates);
-			});
-				
-		}
 		//On remplit la liste des items si besoin est
 		if(jq("#lst_items_settings option").size() == 0 ){
 			that.fill_lst_items_settings(that.menu);
@@ -348,12 +357,12 @@ function GestionnaireMenu(){
 
 	});
 
-	that.render_all_templates = function(templates, lst){
+	that.render_all_pages = function(pages, lst, suff){
 		var i;
 		var template;
-		if(templates.length == 0){
+		if(pages.length == 0){
 			bootbox.dialog({
-				message: "Erreur lors de la récupération des templates",
+				message: "Erreur lors de la récupération des pages",
 				title: "Erreur",
 				buttons: {
 					danger: {
@@ -364,8 +373,8 @@ function GestionnaireMenu(){
 			});
 		}else{
 			for(i=0; i<msg.length; ++i){
-				template = templates[i];
-				lst.after("<option id=" + template.key + " value=" + template.key + ">"
+				template = pages[i];
+				lst.after("<option id=" + template.key + suff + " value=" + template.key + suff + ">"
 				+ template.type + "</option>");
 			}
 		}
@@ -418,7 +427,8 @@ function GestionnaireMenu(){
 		that.add_item();
 	});lst_items
 
-	that.input_add.keydown(function(event){
+	
+/*	that.input_add.keydown(function(event){
 		if(!event.ctrlKey){
 			if(event.which == '13'){
 				that.button_add.click();
@@ -434,7 +444,7 @@ function GestionnaireMenu(){
 		return true;
 	});
 
-
+*/
 	//Quand on fait une modification dans le panel de configuration,
 	//on rajoute une étoile pour montrer à l'utilisateur qu'une modification doit être validée
 
@@ -449,7 +459,7 @@ function GestionnaireMenu(){
 			}
 
 			if(event.which >= '65' && event.which <= '90'){
-				if(that.input_add.val().length > 80){
+				if(that.txt_title.val().length > 80){
 					return false;
 				}
 			}
@@ -457,28 +467,9 @@ function GestionnaireMenu(){
 		return true;
 	});
 
-	that.txt_url.keypress(function(event){
-		if(!event.ctrlKey){
-			if(that.tab_settings.text()[that.tab_settings.text().length -1] != "*"){
-				that.tab_settings.text(that.tab_settings.text() + " *");
-			}
-			if(event.which == '13'){
-				that.submit_config.click();
-				return false; //on empêche le refresh de la page par l'event submit
-			}
 
-			if(event.which >= '65' && event.which <= '90'){
-				if(that.input_add.val().length > 80){
-					return false;
-				}
-			}
-		}
-		return true;
-	});
 
-	that.txt_url.keyup(function(event){
-		that.span_url.text(that.txt_url.val());
-	});
+
 
 	that.show_item.change(function(){
 		if(that.tab_settings.text()[that.tab_settings.text().length -1] != "*"){
@@ -536,17 +527,12 @@ function GestionnaireMenu(){
 
 	that.submit_config.click(function(){
 		var txt = that.txt_title.val();
-		var url = that.txt_url.val()
 		if(jq.trim(txt) === ""){
 			that.txt_title.val('');
 			that.txt_title.focus();
 			return;
 		}
-		if(jq.trim(url) === ""){
-			that.txt_url.val('');
-			that.txt_url.focus();
-			return;
-		}
+
 		that.tab_settings.text("Configurer");
 		//Puis on valide les modifications
 
@@ -557,15 +543,22 @@ function GestionnaireMenu(){
 
 		//On set les nouvelles valeurs
 		item.set_txt(that.txt_title.val());
-		item.set_url(that.txt_url.val());
-		item.set_visible(that.show_item.checked);
-
+		item.set_visible(that.show_item.prop('checked'));
+		
+		if(item.isVisible()){
+			jq("#" + item.key).removeClass("hidden_pages");
+			jq("#" + item.key).addClass("shown_pages");	
+		}else{
+			jq("#" + item.key).removeClass("shown_pages");
+			jq("#" + item.key).addClass("hidden_pages");	
+		}
+		
 		//On met à jour le nouveau parent
 		var id_parent = that.lst_parents.find(":selected").val().replace(that.suff_lst_parents,'');
 		var it_parent = that.menu.get(id_parent);
 
 		//Mise à jour de l'arborescence et de la liste de navigation
-		if(it_parent != null && it_parent != item.get_parent()){
+		if(it_parent != null && (item.get_parent().get_key() != that.menu.get_key() && !(item.get_parent().type == "menu"))){
 			that.apply_parent_change(item, it_parent);
 		}
 
@@ -640,8 +633,7 @@ function GestionnaireMenu(){
 		//On vide tout
 		that.txt_title.val(""); //Titre de l'item ==> input
 		that.lst_parents.empty(); //Liste des parents disponibles ==> select
-		that.txt_url.val(""); //L'URL de la page ===> input
-		that.span_url.text("");
+
 		that.items_children.empty();
 		that.item_parent.text("");
 
@@ -658,8 +650,7 @@ function GestionnaireMenu(){
 			that.show_item.prop('disabled',true); //La page est visible dans le menu ==> checkbox
 			that.edit_parent.prop('disabled',true); //Configurer le parent ===> button
 			that.delete_page.prop('disabled',true);
-			that.txt_url.prop('disabled',true); //L'URL de la page ===> input
-			that.lst_templates.prop('disabled',true);
+
 		}
 		else{
 
@@ -679,8 +670,6 @@ function GestionnaireMenu(){
 			that.show_item.prop('disabled',false); //La page est visible dans le menu ==> checkbox
 
 			that.lst_parents.prop('disabled',false); //Liste des parents disponibles ==> select
-			that.txt_url.prop('disabled',false); //L'URL de la page ===> input
-			that.lst_templates.prop('disabled',false);
 
 
 
@@ -706,22 +695,6 @@ function GestionnaireMenu(){
 			}
 			
 			that.show_item.prop('checked', item.visible); //La page est visible dans le menu ==> checkbox
-			that.txt_url.val(item.get_url()); //L'URL de la page ===> input
-			that.span_url.text(item.get_url());
-
-			//On vérifie si l'item a un template/une page
-			var page = new Page();
-			page.key = item.page;
-			
-			getComponent(page, function(){
-				var template = new Template();
-				template = page.template;
-				getComponent(template, function(){
-					jq("#" + template.key).prop('selected' , true);
-					that.lst_templates.trigger('change');
-				});
-			});
-
 		}
 	});
 

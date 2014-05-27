@@ -13,7 +13,6 @@ function Item(){
 	that.children = new Array(); //Array[]
 	that.txt; //string
 	that.type = "item";
-	that.url;
 	that.visible = false;
 	that.page; //id de la page liée
 
@@ -27,11 +26,7 @@ function Item(){
 	}
 
 	that.set_txt = function(txt){
-		that.txt = txt;
-	}
-
-	that.set_url = function(url){
-		that.url = jq.trim(url).replace(/[^a-z0-9\s]/gi, '').replace(/[_\s]/g, '-');
+		that.txt = jq.trim(txt).replace(/[^a-z0-9\s]/gi, '').replace(/[_\s]/g, '-');;
 	}
 
 	that.set_visible = function(visible){
@@ -57,10 +52,6 @@ function Item(){
 
 	that.get_txt = function(){
 		return that.txt;
-	}
-
-	that.get_url = function(){
-		return that.url;
 	}
 
 	that.isVisible = function(){
@@ -166,7 +157,6 @@ function Item(){
 		it.set_key(that.key);
 		it.visible = that.visible;
 		it.page = that.page;
-		it.url = that.url;
 
 		for(i=0; i<that.children.length; ++i){
 			it.children.push(that.children[i]);
@@ -182,7 +172,6 @@ function Item(){
 		json.txt = that.txt;
 		json.type = that.type;
 		json.visible = that.visible;
-		json.url = that.url;
 
 		if(that.parent instanceof Item)
 			json.parent = that.parent.get_key();
@@ -209,7 +198,6 @@ function Item(){
 		that.txt = it.txt;
 		that.parent = it.parent;
 		that.children = it.children;
-		that.url = it.url;
 		that.visible = it.visible;
 	}
 
