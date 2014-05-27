@@ -2,31 +2,35 @@
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" type="text/css" href="./bootstrap/css/bootstrap.min.css" />
+	<link rel="stylesheet" type="text/css" href="./bootstrap/css/bootstrap-theme.min.css" />
+	<link rel="stylesheet" type="text/css" href="arborescence_css.css" />
+	<link rel="stylesheet" type="text/css" href="style.css" />
 </head>
 <body>
 	<div style="position: fixed;top: 1em;right: 1em;">
-		<div style="margin:20px; margin-top:5px">
-			<div style="position: fixed;right: 1em;"><input type="button" alt="Upload" style="background: url(../logoUpload.png);width:23px;height:23px;font-size:10px;margin:0px;padding:0px;" onclick="if (this.parentNode.parentNode.getElementsByTagName('div')[2].getElementsByTagName('div')[0].style.display != '') { this.parentNode.parentNode.getElementsByTagName('div')[2].getElementsByTagName('div')[0].style.display = ''; } else { this.parentNode.parentNode.getElementsByTagName('div')[2].getElementsByTagName('div')[0].style.display = 'none'; }" />
+		<div class="pull-right">
+			<button id="btnUpload" type="button" class="btn btn-default navbar-btn"><span class="glyphicon glyphicon-upload"></span>  Upload</button><br/>
+			<button id="btnHelp" type="button" class="btn btn-default navbar-btn"><span class="glyphicon glyphicon-question-sign"></span>  Help</button>
+		</div></br>
+		<div style="margin:20px; margin-top:5px" class="pull-right">
+			
+			<div id="divUpload" class="pull-right" style="background-color: eee; width:500px;padding-left:10px;padding-top:10px;right:10px;display: none;">
+				<form id="upload" method="POST" enctype="multipart/form-data" action="/upload">
+					<table id="fileTable"><tbody></tbody></table>
+					<br />
+					<input id="addFile" type="button" value="Add File" /> Press here to add an upload field.<br/>
+					<br />
+					<input type="submit" id="submit" value="Upload"/> Press here to upload the files!
+				</form>
+				<br/>
+				<div id="result"></div>
 			</div>
-			<div style="position: fixed;margin-top:40px;right: 1em;"><input type="button" alt="Aide" style="background: url(../question.png);width:23px;height:23px;font-size:10px;margin:0px;padding:0px;" onclick="if (this.parentNode.parentNode.getElementsByTagName('div')[5].getElementsByTagName('div')[0].style.display != '') { this.parentNode.parentNode.getElementsByTagName('div')[5].getElementsByTagName('div')[0].style.display = ''; } else { this.parentNode.parentNode.getElementsByTagName('div')[5].getElementsByTagName('div')[0].style.display = 'none'; }" />
+			
+			<div id="divHelp" class="pull-bottom" style="margin-top:20px;width:500px;display: none;background-color:fcf8e3;">
+				<p><em>Ce composant permet l'upload des images sur le serveur. Vous pouvez ainsi ajouter vos images pour pouvoir les utiliser plus tard!</em></p>
 			</div>
-			<div >
-				<div style="display: none;">
-					<form id="upload" method="POST" enctype="multipart/form-data" action="/upload">
-						<table id="fileTable"><tbody></tbody></table>
-						<br />
-						<input id="addFile" type="button" value="Add File" /> Press here to add an upload field.<br/>
-						<input type="submit" id="submit" value="Upload"/> Press here to upload the files!
-					</form>
-					<br/>
-					<div id="result"></div>
-				</div>
-			</div>
-			<div >
-				<div style="display: none;">
-					<p><em>Ce composant permet l'upload des images sur le serveur. Vous pouvez ainsi ajouter vos images pour pouvoir les utiliser plus tard!</em></p>
-				</div>
-			</div>
+			
 		</div>
 
 	</div>
@@ -37,6 +41,26 @@
     <script type="text/javascript">
 		//Éviter les conflits entre browsers
 		var jq = jQuery.noConflict();
+		
+		var divUp = jq("#divUpload");
+		var divHe = jq("#divHelp");
+		//a.html("insert html here");
+		var btnUp = jq("#btnUpload");
+		var btnHe = jq("#btnHelp");
+		btnUp.click(function(){
+			if(divUp.is(":visible")){
+				divUp.hide();
+			} else {
+				divUp.show();
+			}
+		});
+		btnHe.click(function(){
+			if(divHe.is(":visible")){
+				divHe.hide();
+			} else {
+				divHe.show();
+			}
+		});
 
 		function addUploadField() {
 			var newFileIndex = jq('#fileTable tbody').children().length;
@@ -83,7 +107,6 @@
 				}
 			});
 		}
-
 
 		addUploadField();
 		jq('#addFile').click(addUploadField);
