@@ -69,6 +69,7 @@ function GestionnaireMenu(){
 	//Ajout d'un item
 	that.add_item = function(){
 		var txt = that.lst_pages.find(":selected").text(); //on récupère le titre de l'item
+		//var page = that.lst_pages.find(":selected").val().replace(that.suff_lst_page,'');
 		var previous_it;
 		var parent;
 		var it;
@@ -91,6 +92,8 @@ function GestionnaireMenu(){
 		//Création de l'item
 		it = new Item();
 		it.set_txt(txt);
+
+		//it.page = page;
 
 		//On récupère l'item qui sera le parent
 		it_parent = that.menu.get(parent);
@@ -140,13 +143,13 @@ function GestionnaireMenu(){
 		//sinon on crée une nouvelle liste
 		if(it_parent.get_nb_children() > 1){ //on test > 1 car on a déjà rajouté l'enfant tout à l'heure
 			jq("#" + parent + ">ul").append("<li class = 'item'  id='" + it.get_key() 
-				+ "'><a href='./editPage.html?idpage=" +  it.get_key() 
+				+ "'><a href='./editPage.html?page=" +  it.page 
 				+ "&lang=" + that.menu.get_lang() 
 				+ "' target='_blank'>" + it.get_txt() + "</a></li>");
 		}
 		else{
 			jq("#" + parent).append("<ul><li class = ' item'  id='" + it.get_key() 
-				+ "'><a href='./editPage.html?idpage=" + it.get_key() 
+				+ "'><a href='./editPage.html?page=" + it.page 
 				+ "&lang=" + that.menu.get_lang()
 				+ "' target='_blank'>" + it.get_txt() + "</a></li></ul>");
 		}
@@ -265,14 +268,14 @@ function GestionnaireMenu(){
 			//Soit on crée une nouvelle liste soit on insère un nouvel élément
 			if(it.get_ordre() == 0){
 				jq("#" + parent).append("<ul><li class = 'item'  id='" + it.get_key() 
-					+ "'><a href='./editPage.html?idpage=" +  it.get_key() 
+					+ "'><a href='./editPage.html?page=" +  it.page 
 					+ "&lang=" + that.menu.get_lang() 
 					+ "' target='_blank'>" + it.get_txt() + "</a></li></ul>");
 
 			}
 			else{
 				jq("#" + parent + ">ul").append("<li class = 'item'  id='" + it.get_key() 
-					+ "'><a href='./editPage.html?idpage=" +  it.get_key() 
+					+ "'><a href='./editPage.html?page=" +  it.page 
 					+ "&lang=" + that.menu.get_lang() 
 					+ "' target='_blank'>" + it.get_txt() + "</a></li>");
 			}
@@ -372,10 +375,10 @@ function GestionnaireMenu(){
 				}
 			});
 		}else{
-			for(i=0; i<msg.length; ++i){
+			for(i=0; i<pages.length; ++i){
 				template = pages[i];
-				lst.after("<option id=" + template.key + suff + " value=" + template.key + suff + ">"
-				+ template.type + "</option>");
+				lst.append("<option id=" + template.key + suff + " value=" + template.key + suff + ">"
+				+ template.name + "</option>");
 			}
 		}
 		
@@ -564,7 +567,7 @@ function GestionnaireMenu(){
 
 		jq("#" + id + that.suff_lst).text(item.get_txt());
 		jq("#" + id).html("<a href='./editPage.html?"
-				+ "idpage=" + item.get_key()
+				+ "page=" + item.get_key()
 				+ "&lang=" + that.menu.get_lang() + "' target='_blank'>" + item.get_txt() + "</a>");
 
 		//On recharge met à jour la liste des settings et on recharge
@@ -601,12 +604,12 @@ function GestionnaireMenu(){
 		//sinon on crée une nouvelle liste
 		if(root.get_nb_children() > 0){
 			jq("#" + root.get_key() + ">ul").append("<li class = 'item'  id='" + partition.get_key() 
-				+ "'><a href='./editPage.html?idpage=" + partition.get_key()
+				+ "'><a href='./editPage.html?page=" + partition.page
 				+ "&lang=" + that.menu.get_lang() + "' target='_blank'>" + partition.get_txt() + "</a></li>");
 		}
 		else{
 			jq("#" + root.get_key()).append("<ul><li class = ' item'  id='" + partition.get_key() 
-				+ "'><a href='./editPage.html?idpage=" + partition.get_key()
+				+ "'><a href='./editPage.html?page=" + partition.page
 				+ "&lang=" + that.menu.get_lang()  + "' target='_blank'>" + partition.get_txt() + "</a></li></ul>");
 		}
 

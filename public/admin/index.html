@@ -1,127 +1,127 @@
 <html>
 <head>
-	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-	<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1">
 
-	<title>Tests Item Prototype</title>
-	<link rel="stylesheet" type="text/css" href="./bootstrap/css/bootstrap.min.css" />
-	<link rel="stylesheet" type="text/css" href="./bootstrap/css/bootstrap-theme.min.css" />
-	<link rel="stylesheet" type="text/css" href="arborescence_css.css" />
-	<link rel="stylesheet" type="text/css" href="style.css" />
+<title>Tests Item Prototype</title>
+<link rel="stylesheet" type="text/css" href="./bootstrap/css/bootstrap.min.css" />
+<link rel="stylesheet" type="text/css" href="./bootstrap/css/bootstrap-theme.min.css" />
+<link rel="stylesheet" type="text/css" href="arborescence_css.css" />
+<link rel="stylesheet" type="text/css" href="style.css" />
 </head>
 <body>
 <div class="container">
 
-	<div class="panel panel-default">
-		<div class="panel-heading">
+<div class="panel panel-default">
+<div class="panel-heading">
 
-			<form class="navbar-form navbar-left" role="search">
-				<button id="add_item" type="button" class="btn btn-info ">Ajouter</button>
-	  			<div class="form-group">
-					<select id="lst_pages" placeholder="select-page" class="form-control">
-						<option>--Choisissez une page--</option>
-					</select>
-					<select id="lst_items" class="form-control">
-						<option>--Choisissez un parent--</option>
-					</select>
-				</div>
+<form class="navbar-form navbar-left" role="search">
+<button id="add_item" type="button" class="btn btn-info "><span class="glyphicon glyphicon-plus"></span>  Ajouter</button>
+<div class="form-group">
+<select id="lst_pages" placeholder="select-page" class="form-control">
+<option>--Choisissez une page--</option>
+</select>
+<select id="lst_items" class="form-control">
+<option>--Choisissez un parent--</option>
+</select>
+</div>
 
-			</form>
-			<button id="cancel" type="button" class="btn btn-info navbar-btn">Annuler</button>
-			<button id="save" type="button" class="btn btn-info navbar-btn btn_insertion_bd">Enregistrer</button>
-			<button id="publish" type="button" class="btn btn-primary navbar-btn btn_insertion_bd">Publier</button>
-		</div>
-		<div class="panel-body">
+</form>
+<button id="cancel" type="button" class="btn btn-info navbar-btn"><span class="glyphicon glyphicon-share-alt"></span>  Annuler</button>
+<button id="save" type="button" class="btn btn-info navbar-btn btn_insertion_bd"><span class="glyphicon glyphicon-floppy-disk"></span>  Enregistrer</button>
+<button id="publish" type="button" class="btn btn-primary navbar-btn btn_insertion_bd"><span class="glyphicon glyphicon-eye-open"></span>  Publier</button>
+</div>
+<div class="panel-body">
 
-			<ul class="nav nav-tabs">
-				<li id="li_structure" class="active options"><a href id="l_structure" class="btn">Pages/Menu</a></li>
-				<li id="li_settings" class="options"><a href id="l_settings" class="btn">Configurer</a></li>
-			</ul>
+<ul class="nav nav-tabs">
+<li id="li_structure" class="active options"><a href id="l_structure" class="btn">Pages/Menu</a></li>
+<li id="li_settings" class="options"><a href id="l_settings" class="btn">Configurer</a></li>
+</ul>
 
-			<div id="panel_structure" class="panel panel-default">
-			  <div class="panel-body">
+<div id="panel_structure" class="panel panel-default">
+<div class="panel-body">
 
-			    <ul id = "menu_container" class="list-group">
-				</ul>
-			  </div>
-			</div>
+<ul id = "menu_container" class="list-group">
+</ul>
+</div>
+</div>
 
-			<div id="panel_settings" class="panel panel-default hidden">
-			  <div class="panel-body">
-			  	<div id="settings">
-			  		<form class="form-horizontal" role="form">
+<div id="panel_settings" class="panel panel-default hidden">
+<div class="panel-body">
+<div id="settings">
+<form class="form-horizontal" role="form">
 
-						<div class="form-group">
-							<label for"lst_items_settings" class="col-sm-2 control-label">Page</label>
-							<div class="col-sm-10">
-								<select id="lst_items_settings" placeholder="select-page" class="form-control"></select>
-							</div>
-						</div>
-
-
-						<div class="form-group">
-							<label for="txt_title" class="col-sm-2 control-label">Titre</label>
-							<div class="col-sm-10">
-								<input id="txt_title" type="text" class="form-control" placeholder="Titre de la page">
-							</div>
-						</div>
-
-						<div class="form-group">
-							<label for"lst_parents" class="col-sm-2 control-label">Parent</label>
-							<div class="col-sm-10">
-								<select id="lst_parents" placeholder="select-page" class="form-control">
-								</select>
-							</div>
-						</div>
-						
-
-						<div class="form-group">
-							<div class="col-sm-offset-2 col-sm-10">
-								<div class="checkbox">
-									<label>
-									<input id="show_item" type="checkbox"> Afficher dans le menu
-									</label>
-								</div>
-							</div>
-						</div>
-
-						<div class="form-group">
-							<div class="col-sm-offset-2 col-sm-10">
-								<button id="submit_config" type="button" class="btn btn-info">Valider les modifications</button>
-								<button id="cancel_config" type="button" class="btn btn-warning">Reset</button>
-								<button id="delete_page" type="button" class="btn btn-danger">Supprimer la page</button>
-							</div>
-						</div>
-					</form>
-				</div>
-				<div id="infos_page">
-
-					<span id ="spn_parent"><strong>Modifier le parent</strong></span>
-					<div class="btn-group">
-						<button id="edit_parent" type="button" class="btn btn-default ">
-							<span class="glyphicon glyphicon-wrench"></span>
-						</button>
-					</div>
-					<div class="well well-sm"><span id="parent_to_edit" ></span></div>
+<div class="form-group">
+<label for"lst_items_settings" class="col-sm-2 control-label">Page</label>
+<div class="col-sm-10">
+<select id="lst_items_settings" placeholder="select-page" class="form-control"></select>
+</div>
+</div>
 
 
+<div class="form-group">
+<label for="txt_title" class="col-sm-2 control-label">Titre</label>
+<div class="col-sm-10">
+<input id="txt_title" type="text" class="form-control" placeholder="Titre de la page">
+</div>
+</div>
 
-					<table id="children" class="table table-hover">
-						<thead>
-							<tr>
-								<th>Modifier les enfants</th>
-							</tr>
-						</thead>
-						<tbody>
-						</tbody>
-					</table>
+<div class="form-group">
+<label for"lst_parents" class="col-sm-2 control-label">Parent</label>
+<div class="col-sm-10">
+<select id="lst_parents" placeholder="select-page" class="form-control">
+</select>
+</div>
+</div>
 
-				</div>
-			  </div>
-			</div>	
 
-		</div>
-	</div>
+<div class="form-group">
+<div class="col-sm-offset-2 col-sm-10">
+<div class="checkbox">
+<label>
+<input id="show_item" type="checkbox"> Afficher dans le menu
+</label>
+</div>
+</div>
+</div>
+
+<div class="form-group">
+<div class="col-sm-offset-2 col-sm-10">
+<button id="submit_config" type="button" class="btn btn-info"><span class="glyphicon glyphicon-ok"></span> Valider les modifications</button>
+<button id="cancel_config" type="button" class="btn btn-warning"><span class="glyphicon glyphicon-repeat"></span> Reset</button>
+<button id="delete_page" type="button" class="btn btn-danger"><span class="glyphicon glyphicon-remove"></span> Supprimer la page</button>
+</div>
+</div>
+</form>
+</div>
+<div id="infos_page">
+
+<span id ="spn_parent"><strong>Modifier le parent</strong></span>
+<div class="btn-group">
+<button id="edit_parent" type="button" class="btn btn-default ">
+<span class="glyphicon glyphicon-wrench"></span>
+</button>
+</div>
+<div class="well well-sm"><span id="parent_to_edit" ></span></div>
+
+
+
+<table id="children" class="table table-hover">
+<thead>
+<tr>
+<th>Modifier les enfants</th>
+</tr>
+</thead>
+<tbody>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>	
+
+</div>
+</div>
 
 </div>
 <div id="results">
@@ -134,14 +134,14 @@
 
 </body>
 <footer>
-	<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
     <script src="jquery.js"></script>
     <!-- Include all compiled plugins (below), or include individual files as needed -->
     <script src="./bootstrap/js/bootstrap.min.js"></script>
     <script src="./bootbox.min.js"></script>
-	<script src="./template.js"></script>
-	<script src="./page.js"></script>
-	<script src="./util.js"></script>
+<script src="./template.js"></script>
+<script src="./page.js"></script>
+<script src="./util.js"></script>
     <script src="./gestionnairemenu_prototype.js"></script>
     <script src="./menu_prototype.js"></script>
     <script src="./item_prototype.js"></script>

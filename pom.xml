@@ -5,7 +5,7 @@
 
     <groupId>virtualsensitive</groupId>
     <artifactId>vs-web</artifactId>
-    <version>alpha</version>
+    <version>beta</version>
 
     <parent>
 		<groupId>org.springframework.boot</groupId>
