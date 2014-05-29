@@ -83,7 +83,7 @@ public class VirtualSensitiveController extends WebMvcConfigurerAdapter {
 		protected void configure(AuthenticationManagerBuilder auth) throws Exception {
 			auth
 			.inMemoryAuthentication()
-			.withUser("user").password("password").roles("USER");
+			.withUser("admin").password("Xy3b62wXDhT5").roles("USER");
 		}
 	}
 
