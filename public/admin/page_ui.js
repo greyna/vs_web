@@ -26,10 +26,10 @@ function PageUi() {
 
 	that.buildAllPagesAndTemplates = function(callback) {
 		getTemplates(that.lst_all_templates, function(){
+			for (var i = 0; i < that.lst_all_templates.length; i++) {
+				that.add_template(that.lst_all_templates[i].type);
+			}
 			getAllComponentsByType(that.lst_all_pages, "page", "Page", function(){
-				for (var i = 0; i < that.lst_all_templates.length; i++) {
-					that.add_template(that.lst_all_templates[i].type);
-				}
 				callback();
 			});
 		});
