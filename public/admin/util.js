@@ -1,5 +1,6 @@
 // util.js
 
+var vs_url = "http://virtualsensitive.com:9292/"
 var tis = this;
 
 // Paramètres GET de l'url (vs.com?param1=1 will return "param1=1")
@@ -27,7 +28,7 @@ Array.prototype.remove = function(from, to) {
 // uses key of argument component
 saveComponent = function(component, callback) {
 	jq.ajax({
-		url : 'http://localhost:8080/component/' + component.key,
+		url : vs_url + 'component/' + component.key,
 		type : 'POST',
 		dataType : 'text',
 		data : JSON.stringify(component.to_json()),
@@ -46,7 +47,7 @@ saveComponent = function(component, callback) {
 // uses key of argument component
 getComponent = function(component, callback) {
 	jq.ajax({
-		url : 'http://localhost:8080/component/' + component.key,
+		url : vs_url + 'component/' + component.key,
 		type : 'GET',
 		dataType : 'text',
 		data : '',
@@ -66,7 +67,7 @@ getComponent = function(component, callback) {
 // uses key of argument component
 deleteComponent = function(component, callback) {
 	jq.ajax({
-		url : 'http://localhost:8080/component/' + component.key,
+		url : vs_url + 'component/' + component.key,
 		type : 'DELETE',
 		dataType : 'text',
 		data : '',
@@ -85,7 +86,7 @@ deleteComponent = function(component, callback) {
 // uses lang and type of argument component
 function getPublishedComponent(component, success_callback, failure_callback) {
 	jq.ajax({
-		url : 'http://localhost:8080/component/' + component.lang + '/' + component.type,
+		url : vs_url + 'component/' + component.lang + '/' + component.type,
 		type : 'GET',
 		dataType : 'text',
 		data : '',
@@ -106,7 +107,7 @@ function getPublishedComponent(component, success_callback, failure_callback) {
 // string classe_js_component doit avoir exactement le nom de votre classe js (par exemple "Menu" ou "Template")
 getAllComponents = function(liste, lang, type, classe_js_component, callback) {
 	jq.ajax({
-		url : 'http://localhost:8080/listComponents/' + lang + '/' + type,
+		url : vs_url + 'listComponents/' + lang + '/' + type,
 		type : 'GET',
 		dataType : 'text',
 		data : '',
@@ -131,7 +132,7 @@ getAllComponents = function(liste, lang, type, classe_js_component, callback) {
 
 getAllComponentsByType = function(liste, type, classe_js_component, callback) {
 	jq.ajax({
-		url : 'http://localhost:8080/listComponentsByType/' + type,
+		url : vs_url + 'listComponentsByType/' + type,
 		type : 'GET',
 		dataType : 'text',
 		data : '',
@@ -159,7 +160,7 @@ getAllComponentsByType = function(liste, type, classe_js_component, callback) {
 // string classe_js_component doit avoir exactement le nom de votre classe js (par exemple "Menu" ou "Template")
 getTemplates = function(liste, callback) {
 	jq.ajax({
-		url : 'http://localhost:8080/listTemplates',
+		url : vs_url + 'listTemplates',
 		type : 'GET',
 		dataType : 'text',
 		data : '',
@@ -184,7 +185,7 @@ getTemplates = function(liste, callback) {
 
 deployHtml = function(html, name) {
 	jq.ajax({
-		url : 'http://localhost:8080/page/' + name,
+		url : vs_url + 'page/' + name,
 		type : 'POST',
 		dataType : 'text',
 		data : html,
