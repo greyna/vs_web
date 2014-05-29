@@ -56,8 +56,8 @@ function PageUi() {
 		that.add_page(that.currentPage.name);
 		that.ui_lst_page.val(that.currentPage.name);
 
-		that.ui_link_web.attr("href", "http://localhost:8080/"+that.currentPage.name+".html");
-		that.ui_link_edit.attr("href", "http://localhost:8080/admin/editPage.html?page="+that.currentPage.key);
+		that.ui_link_web.attr("href", vs_url + that.currentPage.name+".html");
+		that.ui_link_edit.attr("href", vs_url + "admin/editPage.html?page="+that.currentPage.key);
 
 		if (that.currentPage.published)
 			that.ui_pub.html("PUBLIÉ");

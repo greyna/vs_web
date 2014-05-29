@@ -179,7 +179,7 @@ function GestionnaireMenu(){
 		menu.lang = "en";
 		var to_send =  JSON.stringify(menu.to_json());
 		jq.ajax({
-			url : 'http://localhost:8080/component/' + menu.key,
+			url : vs_url + 'component/' + menu.key,
 			type : 'POST',
 			dataType : 'text',
 			data : to_send,
@@ -235,7 +235,7 @@ function GestionnaireMenu(){
 	 	//et false si la récupération a échoué
 		menu.from_json(
 			jq.ajax({
-				url : 'http://localhost:8080/component/en/menu', //récupère le menu publié
+				url : vs_url + 'component/en/menu', //récupère le menu publié
 				type : 'GET',
 				dataType : 'text',
 				data : '',
