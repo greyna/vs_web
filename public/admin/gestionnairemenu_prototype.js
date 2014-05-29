@@ -404,11 +404,11 @@ function GestionnaireMenu(){
 
 	//PUBLIER LE MENU
 	that.button_publish.click(function (e){
-		var menu_published = new Menu();
+		//TODO var menu_published = new Menu();
 
-		that.recup_menu(menu_published);
-		menu_published.published = false;
-		that.save(menu_published);
+		//that.recup_menu(menu_published);
+		//menu_published.published = false;
+		//that.save(menu_published);
 
 
 		that.menu.key = jq.now() + Math.random().toString(36).substr(2);
