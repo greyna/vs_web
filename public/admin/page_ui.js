@@ -25,8 +25,8 @@ function PageUi() {
 	that.ui_lst_template = jq('#lst_template');
 
 	that.buildAllPagesAndTemplates = function(callback) {
-		getAllComponentsByType(that.lst_all_pages, "page", "Page", function(){
-			getTemplates(that.lst_all_templates, function(){
+		getTemplates(that.lst_all_templates, function(){
+			getAllComponentsByType(that.lst_all_pages, "page", "Page", function(){
 				for (var i = 0; i < that.lst_all_templates.length; i++) {
 					that.add_template(that.lst_all_templates[i].type);
 				}
