@@ -301,7 +301,7 @@ function GestionnaireMenu(){
 		var liste = [];
 		//On crée le menu
 		that.menu = new Menu();
-		that.recup_menu(that.menu);
+		//TODOthat.recup_menu(that.menu);
 
 		//Par défaut la langue est anglaise
 		//TODO : permettre de choisir la langue via une liste
