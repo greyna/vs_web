@@ -68,7 +68,7 @@ public class VirtualSensitiveController extends WebMvcConfigurerAdapter {
 			http.csrf().disable();
 			http
 			.authorizeRequests()
-			.antMatchers("/admin/**", "/page/**", "/component/**", "/listComponents/**", "/upload/**").authenticated()
+			.antMatchers("/editPage.html", "/admin/**", "/page/**", "/component/**", "/listComponents/**", "/upload/**").authenticated()
 			.anyRequest().permitAll();
 			http
 			.formLogin()
@@ -83,7 +83,7 @@ public class VirtualSensitiveController extends WebMvcConfigurerAdapter {
 		protected void configure(AuthenticationManagerBuilder auth) throws Exception {
 			auth
 			.inMemoryAuthentication()
-			.withUser("admin").password("Xy3b62wXDhT5").roles("USER");
+			.withUser("admin").password("admin").roles("USER");
 		}
 	}
 
@@ -95,6 +95,18 @@ public class VirtualSensitiveController extends WebMvcConfigurerAdapter {
 		factory.setMaxFileSize("10MB");
 		factory.setMaxRequestSize("10MB");
 		return factory.createMultipartConfig();
+	}
+	private String removePageName(String str) {
+		String newstr = null;
+		if (null != str && str.length() > 0 )
+		{
+		    int endIndex = str.lastIndexOf("/");
+		    if (endIndex != -1)  
+		    {
+		    	newstr = str.substring(0, endIndex); // not forgot to put check if(endIndex != -1)
+		    }
+		}
+		return newstr;
 	}
 	@RequestMapping(value="/upload", method=RequestMethod.POST)
 	public @ResponseBody String handleFileUpload(@RequestParam("name") List<String> names,
@@ -108,7 +120,9 @@ public class VirtualSensitiveController extends WebMvcConfigurerAdapter {
 			file = files.get(i);
 			if (!file.isEmpty() || !name.isEmpty()) {
 				try {
+					
 					byte[] bytes = file.getBytes();
+					new File("public/" + removePageName(name)).mkdirs();
 					BufferedOutputStream stream =
 							new BufferedOutputStream(new FileOutputStream(new File("public/" + name)));
 					stream.write(bytes);

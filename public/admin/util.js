@@ -1,6 +1,7 @@
 // util.js
 
-var vs_url = "http://virtualsensitive.com:9292/"
+//var vs_url = "http://virtualsensitive.com:9292/";
+var vs_url = "http://localhost:8080/";
 var tis = this;
 
 // Paramètres GET de l'url (vs.com?param1=1 will return "param1=1")
