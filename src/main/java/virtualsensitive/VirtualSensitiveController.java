@@ -34,6 +34,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.MultipartConfigElement;
+import javax.servlet.http.HttpServletRequest;
 
 @Controller
 @EnableAutoConfiguration
@@ -338,5 +339,18 @@ public class VirtualSensitiveController extends WebMvcConfigurerAdapter {
 		else {
 			return new ResponseEntity<String>("", HttpStatus.NOT_FOUND);
 		}
+	}
+
+	@RequestMapping("/admin/")
+	public String adminIndexRedirect(HttpServletRequest request) {
+		return "redirect:" + request.getRequestURL() + "pages.html";
+	}
+	@RequestMapping("/admin")
+	public String adminIndexRedirect2(HttpServletRequest request) {
+		return "redirect:" + request.getRequestURL() + "/pages.html";
+	}
+	@RequestMapping("/")
+	public String indexRedirect(HttpServletRequest request) {
+		return "redirect:" + request.getRequestURL() + "index.html";
 	}
 }
