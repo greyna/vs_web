@@ -54,8 +54,6 @@ public class VirtualSensitiveController extends WebMvcConfigurerAdapter {
 	// spring security
 	@Override	
 	public void addViewControllers(ViewControllerRegistry registry) {
-		registry.addViewController("/home").setViewName("home");
-		registry.addViewController("/hello").setViewName("hello");
 		registry.addViewController("/admin/login").setViewName("login");
 	}
 	@Bean
@@ -343,11 +341,11 @@ public class VirtualSensitiveController extends WebMvcConfigurerAdapter {
 
 	@RequestMapping("/admin/")
 	public String adminIndexRedirect(HttpServletRequest request) {
-		return "redirect:" + request.getRequestURL() + "pages.html";
+		return "redirect:" + request.getRequestURL() + "page.html";
 	}
 	@RequestMapping("/admin")
 	public String adminIndexRedirect2(HttpServletRequest request) {
-		return "redirect:" + request.getRequestURL() + "/pages.html";
+		return "redirect:" + request.getRequestURL() + "/page.html";
 	}
 	@RequestMapping("/")
 	public String indexRedirect(HttpServletRequest request) {
