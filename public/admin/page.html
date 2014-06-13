@@ -49,11 +49,15 @@
 			</ul>
 			<form class="navbar-form navbar-left" role="search">
 				<!-- style="width:48%;float:right;margin-top:30px;"> -->
-				Page
+				<b>Page</b>
 				<select id="lst_page" class="form-control">
 					<option id="lst_page_choisir" value="lst_page_choisir">Choisir...</option>
 				</select>
-				<button id="add_page" type="button" class="btn btn-default " style="margin-left:40px;"><span class="glyphicon glyphicon-plus"></span>  Créer page</button>
+				<button style="margin-left:30px;" id="save_page" type="button" class="btn btn-default "><span class="glyphicon glyphicon-floppy-disk"></span> Enregistrer</button>
+				<button id="delete_page" type="button" class="btn btn-default "><span class="glyphicon glyphicon-remove"></span> Supprimer</button>
+
+				<button id="add_page" type="button" class="btn btn-default " style="margin-left:30px;"><span class="glyphicon glyphicon-plus"></span>  Créer page</button>
+				<button id="copy_page" type="button" class="btn btn-default "><span class="glyphicon glyphicon-folder-open"></span> Copier Page</button>
 			</form>
 		</div>
 
@@ -74,14 +78,12 @@
 					</div>
 				</div>
 
-				
+				<br/>
 				<a id="link_edit" href="#" target="_blank">Editer la page du site web</a><br/><br/>
-				<button id="save_page" type="button" class="btn btn-default "><span class="glyphicon glyphicon-floppy-disk"></span> Enregistrer</button>
-				<button id="delete_page" type="button" class="btn btn-default "><span class="glyphicon glyphicon-remove"></span> Supprimer</button>
 			</form>
 			<div style="width:48%;float:right;text-align:center;">
-				<button style="margin-top:40px;" id="pub_page" type="button" class="btn btn-default "><span class="glyphicon glyphicon-eye-open"></span> Publier</button>
-				<button style="margin-top:40px;" id="unpub_page" type="button" class="btn btn-default "><span class="glyphicon glyphicon-eye-close"></span> Retirer la publication</button>
+				<button style="margin-top:40px;" id="pub_page" type="button" class="btn btn-default "><span class="glyphicon glyphicon-cloud-upload"></span> Publier</button>
+				<button style="margin-top:40px;" id="unpub_page" type="button" class="btn btn-default "><span class="glyphicon glyphicon-cloud-download"></span> Retirer la publication</button>
 				<div id="pub" style="margin-top:10px;"></div><br/><a id="link_web" href="#" target="_blank">Voir la page du site web</a>
 			</div>
 		</div>
