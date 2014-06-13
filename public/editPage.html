@@ -23,30 +23,25 @@ function EditPage() {
 		
 		getPublishedComponent(that.template, function() {
 			getPublishedComponent(that.menu, function() {
-				that.renderPage(true);
+				that.renderPage();
 			}, function(){});
 		}, function(){});
 	}
 
-	that.renderPage = function( isEditable ) {
+	that.renderPage = function() {
 		var context = new Object();
 
 		context.menu = that.menu;
 		context.page = that.page;
-		if (isEditable === true) {
-			context.editable = 'class="container" id="editable" contenteditable="true"';
-		}
+		context.editable = 'id="editable" contenteditable="true"';
 
 		var templatePage = Handlebars.compile(that.template.html);
 		var html = templatePage(context);
 
 		//on génère le document avec la page obtenue
-
-		if (isEditable === true) {
-			document.write(html);
-			document.close();
-			that.renderUI();
-		}
+        document.write(html);
+        document.close();
+        that.renderUI();
 
 		// le html retourné correspond au rendu d'une page sans le #editable
 		return html;
@@ -60,20 +55,18 @@ function EditPage() {
 			'<button id="deploy" type="button" class="btn btn-default navbar-btn btn_insertion_bd">Publier</button><br/>'+
 			'<a target="_blank" href="../'+that.page.name+'.html">Voir la page réelle</button></a><br/><br/><br/>' +
 			'<button id="btnUpload" type="button" class="btn btn-default navbar-btn"><span class="glyphicon glyphicon-upload"></span> Upload</button><br/>'+
-			'<button id="btnHelp" type="button" class="btn btn-default navbar-btn"><span class="glyphicon glyphicon-question-sign"></span> Help</button> </div></br> <div style="margin:20px; margin-top:5px" class="pull-right"> <div id="divUpload" class="pull-right" style="background-color: eee; width:500px;padding-left:10px;padding-top:10px;right:10px;display: none;"> <form id="upload" method="POST" enctype="multipart/form-data" action="/upload"> <table id="fileTable"><tbody></tbody></table> <br /> <input id="addFile" type="button" value="Ajouter un fichier" /> <input type="submit" id="submit" value="Lancer l upload"/> </form> <br/> <div id="result"></div> </div> <div id="divHelp" class="pull-bottom" style="margin-top:20px;width:500px;display: none;background-color:fcf8e3;"> <p><em>Ce composant permet l upload des images sur le serveur. Vous pouvez ainsi ajouter vos images pour pouvoir les utiliser plus tard!</em></p> </div> </div> </div>');
+			'<button id="btnHelp" type="button" class="btn btn-default navbar-btn"><span class="glyphicon glyphicon-question-sign"></span> Help</button> </div></br> <div style="margin:20px; margin-top:5px" class="pull-right"> <div id="divUpload" class="pull-right" style="background-color: #eee; width:500px;padding-left:10px;padding-top:10px;right:10px;display: none;"> <form id="upload" method="POST" enctype="multipart/form-data" action="/upload"> <table id="fileTable"><tbody></tbody></table> <br /> <input id="addFile" type="button" value="Ajouter un fichier" /> <input type="submit" id="submit" value="Lancer l upload"/> </form> <br/> <div id="result"></div> </div> <div id="divHelp" class="pull-bottom" style="margin-top:20px;width:500px;display: none;background-color:fcf8e3;"> <p><em>Ce composant permet l upload des images sur le serveur. Vous pouvez ainsi ajouter vos images pour pouvoir les utiliser plus tard!</em></p> </div> </div> </div>');
 
 		jq("#save").click(function (e) {
 			that.savePage();
 		});
 		jq("#deploy").click(function (e) {
-			that.page.published = true;
-			that.savePage();
-			deployHtml(that.renderPage(false), that.page.name+".html");
+			that.page.publishToServer();
 		});
 
 	
-		jq('body').append('<link rel="stylesheet" type="text/css" href="./bootstrap/css/bootstrap-theme.min.css" />');
-		jq('body').append('<link rel="stylesheet" type="text/css" href="./bootstrap/css/bootstrap.min.css" />');
+		jq('body').append('<link rel="stylesheet" type="text/css" href="admin/bootstrap/css/bootstrap-theme.min.css" />');
+		jq('body').append('<link rel="stylesheet" type="text/css" href="admin/bootstrap/css/bootstrap.min.css" />');
 		jq('body').append('<script src="admin/edit/ckeditor.js" />');
 		jq('body').append('<script src="admin/upload.js" />');
     

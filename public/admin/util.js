@@ -131,6 +131,7 @@ getAllComponents = function(liste, lang, type, classe_js_component, callback) {
 	});
 }
 
+// string classe_js_component doit avoir exactement le nom de votre classe js (par exemple "Menu" ou "Template")
 getAllComponentsByType = function(liste, type, classe_js_component, callback) {
 	jq.ajax({
 		url : vs_url + 'listComponentsByType/' + type,
@@ -158,7 +159,6 @@ getAllComponentsByType = function(liste, type, classe_js_component, callback) {
 	});
 }
 
-// string classe_js_component doit avoir exactement le nom de votre classe js (par exemple "Menu" ou "Template")
 getTemplates = function(liste, callback) {
 	jq.ajax({
 		url : vs_url + 'listTemplates',

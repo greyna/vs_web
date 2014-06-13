@@ -14,10 +14,10 @@
 		<div class="pull-right">
 			<button id="btnUpload" type="button" class="btn btn-default navbar-btn"><span class="glyphicon glyphicon-upload"></span>  Upload</button><br/>
 			<button id="btnHelp" type="button" class="btn btn-default navbar-btn"><span class="glyphicon glyphicon-question-sign"></span>  Help</button>
-		</div></br>
+		</div><br/>
 		<div style="margin:20px; margin-top:5px" class="pull-right">
 			
-			<div id="divUpload" class="pull-right" style="background-color: eee; width:500px;padding-left:10px;padding-top:10px;right:10px;display: none;">
+			<div id="divUpload" class="pull-right" style="background-color: #eee; width:500px;padding-left:10px;padding-top:10px;right:10px;display: none;">
 				<form id="upload" method="POST" enctype="multipart/form-data" action="/upload">
 					<table id="fileTable"><tbody></tbody></table>
 					<br />
@@ -28,7 +28,7 @@
 				<div id="result"></div>
 			</div>
 			
-			<div id="divHelp" class="pull-bottom" style="margin-top:20px;width:500px;display: none;background-color:fcf8e3;">
+			<div id="divHelp" class="pull-bottom" style="margin-top:20px;width:500px;display: none;background-color:#fcf8e3;">
 				<p><em>Ce composant permet l'upload des images sur le serveur. Vous pouvez ainsi ajouter vos images pour pouvoir les utiliser plus tard!</em></p>
 			</div>
 			
@@ -77,15 +77,14 @@
 						</select>
 					</div>
 				</div>
-
-				<br/>
-				<a id="link_edit" href="#" target="_blank">Editer la page du site web</a><br/><br/>
 			</form>
 			<div style="width:48%;float:right;text-align:center;">
 				<button style="margin-top:40px;" id="pub_page" type="button" class="btn btn-default "><span class="glyphicon glyphicon-cloud-upload"></span> Publier</button>
 				<button style="margin-top:40px;" id="unpub_page" type="button" class="btn btn-default "><span class="glyphicon glyphicon-cloud-download"></span> Retirer la publication</button>
-				<div id="pub" style="margin-top:10px;"></div><br/><a id="link_web" href="#" target="_blank">Voir la page du site web</a>
-			</div>
+				<div id="pub" style="margin-top:10px;"></div><br/>
+                <a id="link_web" href="#" target="_blank">Voir la page online</a><br/>
+                <a id="link_edit" href="#" target="_blank">Editer la page</a><br/><br/>
+            </div>
 		</div>
 
 	</div>
@@ -113,6 +112,8 @@
     <script src="./item_prototype.js"></script>
     <script src="page.js"></script>
     <script src="page_ui.js"></script>
+    <script src="all_pages.js"></script>
+	<script src="handlebars-v1.3.0.js"></script>
 
     <script type="text/javascript">
 		//Éviter les conflits entre browsers

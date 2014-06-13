@@ -18,6 +18,39 @@ function Page(){
 	that.templatetype; // type du template
 	that.name;
 
+
+
+	that.getHtml = function( menu, template ) {
+		var context = new Object();
+
+		context.menu = menu;
+		context.page = that;
+
+		var templatePage = Handlebars.compile(template.html);
+		var html = templatePage(context);
+		return html;
+	};
+
+	that.publishToServer = function( callback ) {
+		that.published = true;
+		saveComponent(that, function(){});
+
+		template = new Template();
+		menu = new Menu();
+
+		template.type = that.templatetype;
+		menu.lang = that.lang;
+
+		getPublishedComponent(template, function() {
+			getPublishedComponent(menu, function() {
+				deployHtml(that.getHtml(menu, template), that.name+".html");
+				if (callback!==undefined) callback();
+			}, function(){});
+		}, function(){});
+
+		
+	}
+
 	that.to_json = function(){
 		var json = new Object();
 		json.key = that.key;
