@@ -3,13 +3,38 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
-<title>Tests Item Prototype</title>
+<title>VS web | Gestion des menus</title>
 <link rel="stylesheet" type="text/css" href="./bootstrap/css/bootstrap.min.css" />
 <link rel="stylesheet" type="text/css" href="./bootstrap/css/bootstrap-theme.min.css" />
 <link rel="stylesheet" type="text/css" href="arborescence_css.css" />
 <link rel="stylesheet" type="text/css" href="style.css" />
 </head>
 <body>
+	<div style="position: fixed;top: 1em;right: 1em;">
+		<div class="pull-right">
+			<button id="btnUpload" type="button" class="btn btn-default navbar-btn"><span class="glyphicon glyphicon-upload"></span>  Upload</button><br/>
+			<button id="btnHelp" type="button" class="btn btn-default navbar-btn"><span class="glyphicon glyphicon-question-sign"></span>  Help</button>
+		</div></br>
+		<div style="margin:20px; margin-top:5px" class="pull-right">
+			
+			<div id="divUpload" class="pull-right" style="background-color: eee; width:500px;padding-left:10px;padding-top:10px;right:10px;display: none;">
+				<form id="upload" method="POST" enctype="multipart/form-data" action="/upload">
+					<table id="fileTable"><tbody></tbody></table>
+					<br />
+					<input id="addFile" type="button" value="Ajouter un fichier" />
+					<input type="submit" id="submit" value="Lancer l'upload"/>
+				</form>
+				<br/>
+				<div id="result"></div>
+			</div>
+			
+			<div id="divHelp" class="pull-bottom" style="margin-top:20px;width:500px;display: none;background-color:fcf8e3;">
+				<p><em>Ce composant permet l'upload des images sur le serveur. Vous pouvez ainsi ajouter vos images pour pouvoir les utiliser plus tard!</em></p>
+			</div>
+			
+		</div>
+
+	</div>
 <div class="container">
 
 <div class="panel panel-default">
@@ -19,8 +44,8 @@
 			  <li><a href="template.html">Templates</a></li>
 			  <li><a href="page.html">Pages</a></li>
 			  <li class="active"><a href="menu.html">Menus</a></li>
-			  <li><a href="upload.html">Upload</a></li>
 			</ul>
+			<h1 style="color:#DD3333">Le menu ne fonctionne pas pour le moment. Je le finirai sans tarder.<br/><i>Arthur</i></h1>
 <form class="navbar-form navbar-left" role="search">
 <button id="add_item" type="button" class="btn btn-info "><span class="glyphicon glyphicon-plus"></span>  Ajouter</button>
 <div class="form-group">
@@ -146,6 +171,7 @@
     <script src="./bootstrap/js/bootstrap.min.js"></script>
     <script src="./bootbox.min.js"></script>
 <script src="./template.js"></script>
+    <script src="./upload.js"></script>
 <script src="./page.js"></script>
 <script src="./util.js"></script>
     <script src="./gestionnairemenu_prototype.js"></script>

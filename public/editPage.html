@@ -34,7 +34,7 @@ function EditPage() {
 		context.menu = that.menu;
 		context.page = that.page;
 		if (isEditable === true) {
-			context.editable = 'id="editable" contenteditable="true"';
+			context.editable = 'class="container" id="editable" contenteditable="true"';
 		}
 
 		var templatePage = Handlebars.compile(that.template.html);
@@ -53,9 +53,14 @@ function EditPage() {
 	};
 
 	that.renderUI = function() {
-		jq('body').append('<br/><button id="save" type="button" class="btn btn-default navbar-btn btn_insertion_bd">Enregistrer</button>');
-		jq('body').append('<button id="deploy" type="button" class="btn btn-default navbar-btn btn_insertion_bd">Déployer sur le serveur</button>');
-		jq('body').append('<a target="_blank" href="../'+that.page.name+'.html'+'">Voir la page réelle</button>');
+
+		// Floating upload ui
+		jq('body').append('<div style="background-color: rgba(127, 127, 127, 0.3); position: fixed;top: 1em;right: 1em;"> <div class="pull-right">'+
+			'<button id="save" type="button" class="btn btn-default navbar-btn btn_insertion_bd">Enregistrer</button><br/>' +
+			'<button id="deploy" type="button" class="btn btn-default navbar-btn btn_insertion_bd">Déployer sur le serveur</button><br/>'+
+			'<a target="_blank" href="../'+that.page.name+'.html">Voir la page réelle</button></a><br/><br/><br/>' +
+			'<button id="btnUpload" type="button" class="btn btn-default navbar-btn"><span class="glyphicon glyphicon-upload"></span> Upload</button><br/>'+
+			'<button id="btnHelp" type="button" class="btn btn-default navbar-btn"><span class="glyphicon glyphicon-question-sign"></span> Help</button> </div></br> <div style="margin:20px; margin-top:5px" class="pull-right"> <div id="divUpload" class="pull-right" style="background-color: eee; width:500px;padding-left:10px;padding-top:10px;right:10px;display: none;"> <form id="upload" method="POST" enctype="multipart/form-data" action="/upload"> <table id="fileTable"><tbody></tbody></table> <br /> <input id="addFile" type="button" value="Ajouter un fichier" /> <input type="submit" id="submit" value="Lancer l upload"/> </form> <br/> <div id="result"></div> </div> <div id="divHelp" class="pull-bottom" style="margin-top:20px;width:500px;display: none;background-color:fcf8e3;"> <p><em>Ce composant permet l upload des images sur le serveur. Vous pouvez ainsi ajouter vos images pour pouvoir les utiliser plus tard!</em></p> </div> </div> </div>');
 
 		jq("#save").click(function (e) {
 			that.savePage();
@@ -66,7 +71,12 @@ function EditPage() {
 			deployHtml(that.renderPage(false), that.page.name+".html");
 		});
 
+	
+		jq('body').append('<link rel="stylesheet" type="text/css" href="./bootstrap/css/bootstrap-theme.min.css" />');
+		jq('body').append('<link rel="stylesheet" type="text/css" href="./bootstrap/css/bootstrap.min.css" />');
 		jq('body').append('<script src="admin/edit/ckeditor.js" />');
+		jq('body').append('<script src="admin/upload.js" />');
+    
 	}
 
 	that.savePage = function() {

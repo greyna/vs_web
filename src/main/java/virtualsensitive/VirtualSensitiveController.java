@@ -121,20 +121,22 @@ public class VirtualSensitiveController extends WebMvcConfigurerAdapter {
 				try {
 					
 					byte[] bytes = file.getBytes();
-					new File("public/" + removePageName(name)).mkdirs();
+					if (removePageName(name)!=null) {
+						new File("public/" + removePageName(name)).mkdirs();
+					}
 					BufferedOutputStream stream =
 							new BufferedOutputStream(new FileOutputStream(new File("public/" + name)));
 					stream.write(bytes);
 					stream.close();
-					System.out.println("You successfully uploaded " + name + " into " + "public/" + name);
-					message +=  "You successfully uploaded " + name + " into " + "public/" + name + "<br/>";
+					System.out.println("Upload de  " + name + " réussi.");
+					message +=  "Upload de  " + name + " réussi.<br/>";
 				} catch (Exception e) {
-					System.out.println("You failed to upload " + name + " => " + e.getMessage());
-					message +=  "You failed to upload " + name + " => " + e.getMessage() + "<br/>";
+					System.out.println("Upload de  " + name + " raté : " + e.getMessage());
+					message +=  "Upload de  " + name + " raté : " + e.getMessage() + "<br/>";
 				}
 			} else {
-				System.out.println("You failed to upload " + name + " because the file was empty.");
-				message += "You failed to upload " + name + " because the file was empty.<br/>";
+				System.out.println("Upload de  " + name + " raté : fichier vide.");
+				message += "Upload de  " + name + " raté : fichier vide.";
 			}
 		}
 		
