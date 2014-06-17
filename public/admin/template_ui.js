@@ -11,7 +11,8 @@ function Template_ui() {
 	that.ui_template = jq('#template');
 	that.ui_save = jq('#save');
 	that.ui_publish = jq('#publish');
-	that.ui_delete = jq('#delete');
+    that.ui_delete_type = jq('#delete_type');
+	that.ui_delete_version = jq('#delete');
 	that.ui_txt_type = jq('#txt_type');
 	that.ui_lst_type = jq('#lst_type');
 	that.ui_add_type = jq('#add_type');
@@ -49,22 +50,21 @@ function Template_ui() {
 			that.ui_pub.html("NON PUBLIÉ");
 	};
 
-	that.findTemplate = function(type, release) {
-		for (var i = 0; i < that.lst_all_templates.length; i++) {
-			t = that.lst_all_templates[i];
-			if (t.type === type) {
-				if (t.release === release) {
-					return i;
-				}
-			}
-		}
-		return -1;
-	};
+    that.findTemplate = function(type, release) {
+        for (var i = 0; i < that.lst_all_templates.length; i++) {
+            var t = that.lst_all_templates[i];
+            if (t.type === type && t.release === release) {
+                return i;
+            }
+        }
+        return -1;
+    };
+
 	that.updateTemplateInList = function(template) {
 		var i = that.findTemplate(template.type, template.release);
 		if (i>=0)
 			that.lst_all_templates[i] = template.clone();
-	}
+	};
 
 	that.new_template = function() {
 		that.currentTemplate.newkey();
@@ -111,26 +111,35 @@ function Template_ui() {
 		}
 	};
 
+    that.build_lst_types = function() {
+        that.ui_lst_type.html('<option id="lst_type_choisir" value="lst_type_choisir">Choisir...</option>');
+        that.ui_lst_type.val("lst_type_choisir");
+
+        for (var i = 0; i < that.lst_all_templates.length; i++) {
+            that.add_type(that.lst_all_templates[i].type);
+        }
+    };
 
 
-	that.ui_add_type.click(function (e){
+
+	that.ui_add_type.click(function (){
 		that.currentTemplate.type = that.ui_txt_type.val();
 		that.new_template();
 		that.build_lst_release();
 	});
-	that.ui_new_version.click(function (e){
+	that.ui_new_version.click(function (){
 		if (that.ui_lst_type.val() === "lst_type_choisir") return;
 		that.new_template();
 	});
 
-	that.ui_lst_type.change(function (e){
+	that.ui_lst_type.change(function (){
 		if (that.ui_lst_type.val() === "lst_type_choisir") return;
 
 		that.currentTemplate.type = that.ui_lst_type.val();
 		that.build_lst_release();
 	});
 
-	that.ui_lst_release.change(function (e){
+	that.ui_lst_release.change(function (){
 		if (that.ui_lst_release.val() === "lst_release_choisir") return;
 		var i = that.findTemplate(that.currentTemplate.type, that.ui_lst_release.val());
 
@@ -138,7 +147,7 @@ function Template_ui() {
 		that.renderTemplate();
 	});
 
-	that.ui_save.click(function (e) {
+	that.ui_save.click(function () {
 		if (that.ui_lst_type.val() === "lst_type_choisir" ||
 			that.ui_lst_release.val() === "lst_release_choisir") return;
 
@@ -147,17 +156,36 @@ function Template_ui() {
 		saveComponent(that.currentTemplate, function(){});
 	});
 
-	that.ui_delete.click(function (e) {
-		if (that.ui_lst_type.val() === "lst_type_choisir" ||
-			that.ui_lst_release.val() === "lst_release_choisir") return;
-			
-		var i = that.findTemplate(that.currentTemplate.type, that.currentTemplate.release);
-		that.lst_all_templates.remove(i);
-		that.build_lst_release;
-		deleteComponent(that.currentTemplate, function(){});
-	});
+    that.deleteTemplates = function(type) {
+        for (var i = 0; i < that.lst_all_templates.length; i++) {
+            var t = that.lst_all_templates[i];
+            if (t.type === type) {
+                deleteComponent(t, function(){});
+                that.lst_all_templates.remove(i);
+                i = 0;
+            }
+        }
+    };
 
-	that.ui_publish.click(function (e){
+    that.ui_delete_type.click(function () {
+        if (that.ui_lst_type.val() === "lst_type_choisir" ||
+            that.ui_lst_release.val() === "lst_release_choisir") return;
+
+        that.deleteTemplates(that.currentTemplate.type);
+        that.build_lst_types();
+        that.build_lst_release();
+    });
+    that.ui_delete_version.click(function () {
+        if (that.ui_lst_type.val() === "lst_type_choisir" ||
+            that.ui_lst_release.val() === "lst_release_choisir") return;
+
+        var i = that.findTemplate(that.currentTemplate.type, that.currentTemplate.release);
+        that.lst_all_templates.remove(i);
+        that.build_lst_release();
+        deleteComponent(that.currentTemplate, function(){});
+    });
+
+	that.ui_publish.click(function (){
 		if (that.ui_lst_type.val() === "lst_type_choisir" ||
 			that.ui_lst_release.val() === "lst_release_choisir") return;
 			

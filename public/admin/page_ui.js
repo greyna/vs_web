@@ -17,7 +17,7 @@ function PageUi() {
 	that.ui_link_edit = jq('#link_edit');
 
 	that.ui_save = jq('#save_page');
-	that.ui_delete = jq('#delete_page');
+	that.ui_delete_version = jq('#delete_page');
 
 	that.ui_lst_page = jq('#lst_page');
 	that.ui_add_page = jq('#add_page');
@@ -120,7 +120,7 @@ function PageUi() {
 		saveComponent(that.currentPage, function(){});
 	});
 
-	that.ui_delete.click(function (e) {
+	that.ui_delete_version.click(function (e) {
 		if (that.ui_lst_page.val() === "lst_page_choisir") return;
 		if (that.currentPage.published) return; //TODO afficher pour supprimer il ne doit pas être publié
 

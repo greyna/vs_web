@@ -293,9 +293,11 @@ public class VirtualSensitiveController extends WebMvcConfigurerAdapter {
 		boolean hasResponses = false;
 		StringBuilder result = new StringBuilder("[ ");
 		for(ViewRow row : response) {
-			result.append(row.getDocument().toString());
-			result.append(", ");
-			hasResponses = true;
+			if (row.getDocument() != null) {
+				result.append(row.getDocument().toString());
+				result.append(", ");
+				hasResponses = true;
+			}
 		}
 
 		System.out.println("getAllComponentsByType ends");
